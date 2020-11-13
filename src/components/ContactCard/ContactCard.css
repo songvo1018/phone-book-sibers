@@ -1,0 +1,52 @@
+
+.list {
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.card {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.Modal {
+  max-width: 640px;
+  margin: 0 auto;
+  margin-top: 120px;
+  min-height: 400px;
+  background-color: #f8f8f8ed;
+}
+
+.Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #8383835c;
+}
+
+.Modal-window {
+  display: flex;
+  justify-content: space-between;
+}
+.Modal-content {
+  padding: 50px;
+}
+.close {
+  margin: 50px 20px;
+  border: none;
+  background-color: rgb(224, 224, 224);
+  display: block;
+  min-width: 48px;
+  min-height: 48px;
+  color: gray;
+  max-height: 48px;
+  font-size: 24px;
+}
+
+.close :hover {
+  cursor: pointer;
+  background-color: none;
+}

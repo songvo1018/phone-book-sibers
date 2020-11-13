@@ -1,4 +1,11 @@
+import React from 'react';
+
+
+
 import './App.css';
+
+import ContactList from './components/ContactList/ContactList'
+
 
 function App() {
   return (
@@ -6,6 +13,7 @@ function App() {
       <header className="App-header">
         Phone book
       </header>
+      <ContactList />
     </div>
   );
 }
