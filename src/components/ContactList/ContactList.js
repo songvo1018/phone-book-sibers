@@ -42,7 +42,8 @@ const ContactList = () => {
        website: contact.website,
        phone: contact.phone,
        company: contact.company.name,
-       avatar: contact.avatar
+       avatar: contact.avatar,
+       favorite: contact.favorite
      });
      localStorage.setItem(`${contact.id}`, person)
     })
@@ -57,14 +58,13 @@ const ContactList = () => {
   } else {
     let keys = Object.keys(localStorage);
     for(let key of keys) {
-      parseContactsData.push( JSON.parse(localStorage.getItem(key)));
+      parseContactsData.push(JSON.parse(localStorage.getItem(key)));
     }
   }
 
   // TODO: 
-  // 0. Add possibility edit data by contact
-  // 1. Add filter parseContactsData by name a>z
-  // 2. Emplimenting possibility for search contact by name
+  // 0. Add filter parseContactsData by name a>z
+  // 1. Emplimenting possibility for search contact by name
 
   return (
     <div>

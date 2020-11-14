@@ -27,7 +27,7 @@
   background-color: #8383835c;
 }
 
-.Modal-window {
+.Modal-header {
   display: flex;
   justify-content: space-between;
 }
@@ -49,4 +49,19 @@
 .close :hover {
   cursor: pointer;
   background-color: none;
+}
+
+.Modal-input {
+  display: block;
+  padding: 16px;
+
+}
+
+.Modal-footer {
+  padding: 16px;
+}
+
+
+.edited-message {
+  padding: 16px;
 }
