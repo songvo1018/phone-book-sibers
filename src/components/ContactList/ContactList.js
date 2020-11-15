@@ -62,9 +62,19 @@ const ContactList = () => {
     }
   }
 
+  parseContactsData.sort(function(a, b) {
+    let nameA = a.name.toLowerCase();
+    let nameB = b.name.toLowerCase();
+    if (nameA < nameB) //сортируем строки по возрастанию
+      return -1
+    if (nameA > nameB)
+      return 1
+    return 0 // Никакой сортировки
+  })
+  console.log(parseContactsData);
+
   // TODO: 
-  // 0. Add filter parseContactsData by name a>z
-  // 1. Emplimenting possibility for search contact by name
+  // 0. Emplimenting possibility for search contact by name
 
   return (
     <div>
