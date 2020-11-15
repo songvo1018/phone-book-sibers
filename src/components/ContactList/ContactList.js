@@ -6,32 +6,37 @@ import ContactCard from '../ContactCard/ContactCard'
 
 const ContactList = () => {
   const xhr = new XMLHttpRequest();
-  const dataUrl = 'http://demo.sibers.com/users'
+  const dataUrl = 'http://demo.sibers.com/users';
   
-  let [requestContactsData, setRequestContactsData] = React.useState([])
-  let parseContactsData = []
+  let [requestContactsData, setRequestContactsData] = React.useState([]);
+  let [searchName, setSearchName] = React.useState(``);
+  let parseContactsData = [];
 
   const getDataFromUrl = () => {
     if (requestContactsData.length === 0) {
-      xhr.open('GET', dataUrl)
-      xhr.responseType = 'json'
-      xhr.send()
+      xhr.open('GET', dataUrl);
+      xhr.responseType = 'json';
+      xhr.send();
       xhr.onload = function () {
         if (xhr.status !== 200) {
-          alert(`Error ${xhr.status}: ${xhr.statusText}`)
+          alert(`Error ${xhr.status}: ${xhr.statusText}`);
         } else {
           console.log(xhr.response);
-          setRequestContactsData(xhr.response)
-          return 
+          setRequestContactsData(xhr.response);
+          return;
         }
       }
       xhr.onerror = function () {
         console.log('Error. Request failed.');
       }
     } else {
-      return 
+      return;
     }
   }
+
+   const handleSearch = (event) => {
+    setSearchName(event.target.value);
+  };
 
   const saveToStorage = () => {
     requestContactsData.map(contact => {
@@ -45,16 +50,30 @@ const ContactList = () => {
        avatar: contact.avatar,
        favorite: contact.favorite
      });
-     localStorage.setItem(`${contact.id}`, person)
+     return localStorage.setItem(`${contact.id}`, person);
     })
-   }
+  };
+
+  const renderSearchContacts = () => {
+    let searchContact = parseContactsData.filter(el => {
+      return el.name.toLowerCase().indexOf(searchName.toLowerCase()) > -1;
+    })
+    return (
+      searchContact.map(contact => {
+        return (
+          <ContactCard person={contact} />
+        )
+      })
+    );
+  };
+
 
   React.useEffect(() => {
-    saveToStorage()
-  }, [requestContactsData])
-
-  if (localStorage.length == 0) {
-    getDataFromUrl()
+    saveToStorage();
+  }, [requestContactsData]);
+  
+  if (localStorage.length === 0) {
+    getDataFromUrl();
   } else {
     let keys = Object.keys(localStorage);
     for(let key of keys) {
@@ -65,31 +84,40 @@ const ContactList = () => {
   parseContactsData.sort(function(a, b) {
     let nameA = a.name.toLowerCase();
     let nameB = b.name.toLowerCase();
-    if (nameA < nameB) //сортируем строки по возрастанию
-      return -1
+    
+    if (nameA < nameB) 
+      return -1;
     if (nameA > nameB)
-      return 1
-    return 0 // Никакой сортировки
+      return 1;
+    return 0
   })
-  console.log(parseContactsData);
 
   // TODO: 
-  // 0. Emplimenting possibility for search contact by name
+  // 0. Group contact by first letter of name
+  // 1. Add 
 
   return (
     <div>
-      {parseContactsData.map(contact => {
-        return (
-        <ContactCard person={contact} />
-        )
-      })}
       <div>
-        <select>
+        <input autoFocus type="text" value={searchName} placeholder="Search contact..." onChange={event => handleSearch(event)}></input>
+        <button onClick={() => setSearchName('')}>Clear search</button>
+      </div>
+      {
+        searchName !== '' 
+          ? renderSearchContacts()
+          : parseContactsData.map(contact => {
+            return (
+            <ContactCard person={contact} />
+            )
+          })
+      }      
+      <div>
+        {/* <select>
           <option value=""></option>
           <option value=""></option>
           <option value=""></option>
           <option value=""></option>
-        </select>
+        </select> */}
       </div>
     </div>
   )

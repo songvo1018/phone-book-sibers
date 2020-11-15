@@ -4,10 +4,17 @@ import './ContactCard.css';
 
 
 const ContactCard = (data) => {
-  let [person, setPerson] = React.useState(data.person);
+  let [person, setPerson] = React.useState({});
   let [showModal, setShowModal] = React.useState(false);
   let [isEditing, setIsEditing] = React.useState(false);
   let [isEdited, setIsEdited] = React.useState(false);
+
+  React.useEffect(() => {
+    const update = () => {
+      setPerson(data.person)
+    }
+    update()
+  }, [data])
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -23,7 +30,7 @@ const ContactCard = (data) => {
 
   const handleSaveChanges = () => {
     localStorage.setItem(`${person.id}`, JSON.stringify(person))
-    //  post request on server
+    // here we send 'post' request on the server
     setIsEdited(true)
     setIsEditing(false)
   }
@@ -44,7 +51,7 @@ const ContactCard = (data) => {
     }
     setPerson(obj)
   }
-  
+
   return (
     <div className="list">
       <div className="card" key={person.id} onClick={handleOpenModal}>
