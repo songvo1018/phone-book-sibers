@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
-import './ContactCard.css';
 
+import './ContactCard.css';
 
 const ContactCard = (data) => {
   let [person, setPerson] = React.useState({});
@@ -52,6 +52,21 @@ const ContactCard = (data) => {
     setPerson(obj)
   }
 
+  const renderInputFields = () => {
+    let inputNames = ['name', 'phone', 'address', 'city', 'website', 'avatar']
+    let inputs = [];
+
+    inputNames.map(name => {
+      inputs.push(<input name={name} type="text" value={person[name]} onChange={(event) => {handleChangeContactData(event)}} className='Modal-input' />)
+    })
+
+    return (
+      <div>
+        {inputs}
+      </div>
+    )
+  }
+
   return (
     <div className="list">
       <div className="card" key={person.id} onClick={handleOpenModal}>
@@ -81,11 +96,7 @@ const ContactCard = (data) => {
                 </div>
                 : <div>
                     <img alt={person.name} src={person.avatar} />
-                    <input name='avatar' className='Modal-input' type="text" onChange={(event) => {handleChangeContactData(event)}} value={person.avatar} />
-                    <input name='name' className='Modal-input' type="text" onChange={(event) => {handleChangeContactData(event)}} value={person.name} />
-                    <input name='phone' className='Modal-input' type="text" onChange={(event) => {handleChangeContactData(event)}} value={person.phone} />
-                    <input name='address' className='Modal-input' type="text" onChange={(event) => {handleChangeContactData(event)}} value={person.address} />
-                    <input name='website' className='Modal-input' type="text" onChange={(event) => {handleChangeContactData(event)}} value={person.website} />
+                    {renderInputFields()}
                   </div>
               }
             </div>

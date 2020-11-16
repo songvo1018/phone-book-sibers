@@ -8,12 +8,12 @@ const ContactList = () => {
   const xhr = new XMLHttpRequest();
   const dataUrl = 'http://demo.sibers.com/users';
   
-  let [requestContactsData, setRequestContactsData] = React.useState([]);
+  let [requestedContactsData, setRequestContactsData] = React.useState([]);
   let [searchName, setSearchName] = React.useState(``);
   let parseContactsData = [];
 
   const getDataFromUrl = () => {
-    if (requestContactsData.length === 0) {
+    if (requestedContactsData.length === 0) {
       xhr.open('GET', dataUrl);
       xhr.responseType = 'json';
       xhr.send();
@@ -38,8 +38,8 @@ const ContactList = () => {
     setSearchName(event.target.value);
   };
 
-  const saveToStorage = () => {
-    requestContactsData.map(contact => {
+  const setToStorage = () => {
+    requestedContactsData.map(contact => {
      let person = JSON.stringify({
        id: contact.id,
        name: contact.name,
@@ -54,24 +54,53 @@ const ContactList = () => {
     })
   };
 
-  const renderSearchContacts = () => {
+  const renderSearchedContacts = () => {
     let searchContact = parseContactsData.filter(el => {
       return el.name.toLowerCase().indexOf(searchName.toLowerCase()) > -1;
     })
+
     return (
       searchContact.map(contact => {
         return (
           <ContactCard person={contact} />
-        )
+        );
       })
     );
   };
 
+  const renderGroupedContactsByName = () => {
+    return (
+      Object.keys(groupByLetter).map(key => {
+        return (
+          <div>
+            {
+              groupByLetter[key].length > 0
+                ? <div>
+                    {key.toUpperCase()}
+                    {
+                      groupByLetter[key].map(contact => {
+                        return (
+                          <ContactCard person={contact} />
+                          )
+                        })
+                    }
+                  </div>
+                : null
+          }
+          </div>
+        )
+    })
+    )
+  }
 
+  // when we get json from url, we should set data on localStorage
+  // 
   React.useEffect(() => {
-    saveToStorage();
-  }, [requestContactsData]);
+    setToStorage();
+  }, [requestedContactsData]);
   
+  // check whether to make a request to the server or use data from the local storage
+  // 
   if (localStorage.length === 0) {
     getDataFromUrl();
   } else {
@@ -84,7 +113,6 @@ const ContactList = () => {
   parseContactsData.sort(function(a, b) {
     let nameA = a.name.toLowerCase();
     let nameB = b.name.toLowerCase();
-    
     if (nameA < nameB) 
       return -1;
     if (nameA > nameB)
@@ -92,33 +120,60 @@ const ContactList = () => {
     return 0
   })
 
+  // creating object  with keys (from letters array)  for grouping contacts by first letter
+  // 
+  const alphabet = []
+  function genCharArray(charA, charZ) {
+    let i = charA.charCodeAt(0), j = charZ.charCodeAt(0);
+    for (; i <= j; ++i) {
+        alphabet.push([String.fromCharCode(i), []]);
+    }
+    return alphabet;
+  }
+  let entries = new Map (genCharArray('a', 'z') )
+  
+  let groupByLetter = Object.fromEntries(entries);
+
+// filling the array with contacts by their first letter of the name
+// 
+  const groupContacts = () => {
+    for (let i = 0; i < parseContactsData.length; i++) {
+      const element = parseContactsData[i];
+
+      let firstLetter = element.name.toLowerCase().slice(0, 1);
+
+      for (let i = 0; i < alphabet.length; i++) {
+        const letter = alphabet[i][0];
+        
+        if (firstLetter === letter) {
+          groupByLetter[letter].push(element)
+        }
+      }
+    }
+  }
+
+  groupContacts()
+  
   // TODO: 
-  // 0. Group contact by first letter of name
-  // 1. Add 
+  // 1. Add styles
 
   return (
     <div>
       <div>
-        <input autoFocus type="text" value={searchName} placeholder="Search contact..." onChange={event => handleSearch(event)}></input>
+        <input 
+          autoFocus 
+          type="text" 
+          value={searchName} 
+          placeholder="Search contact..." 
+          onChange={event => handleSearch(event)}
+        ></input>
         <button onClick={() => setSearchName('')}>Clear search</button>
       </div>
       {
-        searchName !== '' 
-          ? renderSearchContacts()
-          : parseContactsData.map(contact => {
-            return (
-            <ContactCard person={contact} />
-            )
-          })
-      }      
-      <div>
-        {/* <select>
-          <option value=""></option>
-          <option value=""></option>
-          <option value=""></option>
-          <option value=""></option>
-        </select> */}
-      </div>
+        searchName !== ''
+          ? renderSearchedContacts()
+          : renderGroupedContactsByName()
+      }
     </div>
   )
 }
