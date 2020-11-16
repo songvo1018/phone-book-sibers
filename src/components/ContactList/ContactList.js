@@ -1,6 +1,6 @@
 import React from 'react';
 
-// import './ContactList.css';
+import './ContactList.css';
 
 import ContactCard from '../ContactCard/ContactCard'
 
@@ -72,7 +72,7 @@ const ContactList = () => {
     return (
       Object.keys(groupByLetter).map(key => {
         return (
-          <div>
+          <div className='group' key={`group-${key}`}>
             {
               groupByLetter[key].length > 0
                 ? <div>
@@ -80,10 +80,11 @@ const ContactList = () => {
                     {
                       groupByLetter[key].map(contact => {
                         return (
-                          <ContactCard person={contact} />
+                          <ContactCard key={`${key}-${contact.id}`} person={contact} />
                           )
                         })
                     }
+                    <hr />
                   </div>
                 : null
           }
@@ -167,7 +168,7 @@ const ContactList = () => {
           placeholder="Search contact..." 
           onChange={event => handleSearch(event)}
         ></input>
-        <button onClick={() => setSearchName('')}>Clear search</button>
+        <button className='clear' onClick={() => setSearchName('')}>Clear search</button>
       </div>
       {
         searchName !== ''

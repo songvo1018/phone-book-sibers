@@ -16,6 +16,14 @@ const ContactCard = (data) => {
     update()
   }, [data])
 
+  React.useEffect(() => {
+    if (isEdited) {
+      setTimeout(() => {
+        setIsEdited(false)
+      }, 900);
+    }
+  }, [isEdited])
+
   const handleOpenModal = () => {
     setShowModal(true);
   }
@@ -26,6 +34,7 @@ const ContactCard = (data) => {
   
   const handleEditContact = () => {
     setIsEditing(true)
+    setIsEdited(false)
   }
 
   const handleSaveChanges = () => {
@@ -53,13 +62,22 @@ const ContactCard = (data) => {
   }
 
   const renderInputFields = () => {
-    let inputNames = ['name', 'phone', 'address', 'city', 'website', 'avatar']
+    let inputNames = ['name', 'phone', 'address', 'company', 'website', 'avatar']
     let inputs = [];
 
-    inputNames.map(name => {
-      inputs.push(<input name={name} type="text" value={person[name]} onChange={(event) => {handleChangeContactData(event)}} className='Modal-input' />)
-    })
-
+    inputNames.map(name => 
+      inputs.push(
+        <input
+          placeholder={name}
+          key={name}
+          name={name}
+          type="text"
+          value={person[name]}
+          onChange={(event) => {handleChangeContactData(event)}}
+          className='Modal-input'
+        />
+      )
+    )
     return (
       <div>
         {inputs}
@@ -68,8 +86,8 @@ const ContactCard = (data) => {
   }
 
   return (
-    <div className="list">
-      <div className="card" key={person.id} onClick={handleOpenModal}>
+    <div className="item">
+      <div className={person.favorite ? "card favorite" : "card " }key={person.id} onClick={handleOpenModal}>
             <div>{person.name}</div>
             <div>{person.phone}</div>
       </div>
@@ -81,36 +99,45 @@ const ContactCard = (data) => {
         overlayClassName='Overlay'
         shouldCloseOnOverlayClick={true}
         shouldCloseOnEsc={true}
+        ariaHideApp={false}
       >
         <div className='Modal-window'>
           <div className='Modal-header'>
-            <div className='Modal-content'>
               {
                 !isEditing
-                ?<div>
-                  <div><img alt={person.name} src={person.avatar} /></div>
-                  <div>{person.name}</div>
-                  <div>{person.phone}</div>
-                  <div>{person.address}</div>
-                  <div>{person.website}</div>
+                ? <div className='Modal-content'>
+                  {
+                    person.avatar
+                    ? <img alt={person.name} src={person.avatar} />
+                    : <i className="fas fa-grin-beam-sweat"></i>
+                  }
+                  <div className='Modal-text'>{person.name}</div>
+                  <div className='Modal-text'>{person.phone}</div>
+                  <div className='Modal-text'>{person.address}</div>
+                  <a href={`https://${person.website}`} className='Modal-text'>{person.website}</a>
                 </div>
-                : <div>
-                    <img alt={person.name} src={person.avatar} />
+                : <div className='Modal-content'>
+                    {
+                      person.avatar
+                      ? <img alt={person.name} src={person.avatar} />
+                      : <i className="fas fa-grin-beam-sweat"></i>
+                    } 
                     {renderInputFields()}
                   </div>
               }
+            <div>
+              <button className='close' onClick={handleCloseModal}>
+                <i className="fas fa-times"></i>
+              </button>
             </div>
-            <button className='close' onClick={handleCloseModal}>
-              x
-            </button>
           </div>
           <div className='Modal-footer'>
             {
               isEditing
-              ? <button className='edit' onClick={handleSaveChanges}>
+              ? <button className='save' onClick={handleSaveChanges}>
                   Save changes
                 </button>
-              : <button className='save' onClick={handleEditContact}>
+              : <button className='edit' onClick={handleEditContact}>
                   Edit contact
                 </button>
             }
