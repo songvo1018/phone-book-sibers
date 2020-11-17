@@ -3,7 +3,7 @@ import Modal from 'react-modal'
 import './ContactCard.css'
 
 const ContactCard = (data) => {
-    let [person, setPerson] = useState({})
+    let [person, setPerson] = useState(data.person)
     let [showModal, setShowModal] = useState(false)
     let [isEditing, setIsEditing] = useState(false)
     let [isEdited, setIsEdited] = useState(false)
@@ -61,31 +61,48 @@ const ContactCard = (data) => {
     }
 
     const renderInputFields = () => {
-        let inputNames = [
-            'name',
-            'phone',
-            'address',
-            'company',
-            'website',
-            'avatar',
-        ]
+        const inputNames = {
+            name: person.name,
+            phone: person.phone,
+            city: person.address.city,
+            company: person.company.name,
+            website: person.website,
+            avatar: person.avatar,
+        }
         let inputs = []
 
-        inputNames.map((name) =>
-            inputs.push(
+        console.log(Object.keys(inputNames))
+        Object.keys(inputNames).map((name) => {
+            return inputs.push(
                 <input
                     placeholder={name}
                     key={name}
                     name={name}
                     type="text"
-                    value={person[name]}
+                    value={inputNames[name]}
                     onChange={(event) => {
                         handleChangeContactData(event)
                     }}
                     className="modal-input"
                 />
             )
-        )
+        })
+        // inputNames.map((name) =>{
+        //     console.log(person[name[0]])
+        //     inputs.push(
+        //         <input
+        //             placeholder={name[1]}
+        //             key={name[0]}
+        //             name={name[0]}
+        //             type="text"
+        //             value={person[name[0]]}
+        //             onChange={(event) => {
+        //                 handleChangeContactData(event)
+        //             }}
+        //             className="modal-input"
+        //         />
+        //     )
+        // })
         return <div>{inputs}</div>
     }
 
@@ -117,7 +134,10 @@ const ContactCard = (data) => {
                                 <div className="modal-text">{person.name}</div>
                                 <div className="modal-text">{person.phone}</div>
                                 <div className="modal-text">
-                                    {person.address}
+                                    {person.company.name}
+                                </div>
+                                <div className="modal-text">
+                                    {person.address.city}
                                 </div>
                                 <a
                                     href={`https://${person.website}`}

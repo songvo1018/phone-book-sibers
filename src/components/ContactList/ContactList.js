@@ -1,56 +1,48 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import './ContactList.css'
 import ContactCard from '../ContactCard/ContactCard'
-const DATA_URL = 'http://demo.sibers.com/users';
+const DATA_URL = 'http://demo.sibers.com/users'
+
 const ContactList = () => {
-    const xhr = new XMLHttpRequest();
-
-    let [requestedContactsData, setRequestContactsData] = React.useState([])
-    let [searchName, setSearchName] = React.useState(``)
-    let parseContactsData = []
-
+    const xhr = new XMLHttpRequest()
+    const [isLoaded, setIsLoaded] = useState(false)
     const getDataFromUrl = () => {
-        if (requestedContactsData.length === 0) {
-            xhr.open('GET', DATA_URL)
-            xhr.responseType = 'json'
-            xhr.send()
-            xhr.onload = function () {
-                if (xhr.status !== 200) {
-                    alert(`Error ${xhr.status}: ${xhr.statusText}`)
-                } else {
-                    console.log(xhr.response)
-                    setRequestContactsData(xhr.response)
-                    return
-                }
+        xhr.open('GET', DATA_URL)
+        xhr.responseType = 'json'
+        xhr.send()
+        xhr.onload = function () {
+            if (xhr.status !== 200) {
+                alert(`Error ${xhr.status}: ${xhr.statusText}`)
+            } else {
+                localStorage.setItem(
+                    'contactsData',
+                    JSON.stringify(xhr.response)
+                )
+                setIsLoaded(true)
+                return
             }
-            xhr.onerror = function () {
-                console.log('Error. Request failed.')
-            }
-        } 
+        }
+        xhr.onerror = function () {
+            console.log('Error. Request failed.')
+        }
     }
+
+    getDataFromUrl()
+
+    let [searchName, setSearchName] = useState(``)
+    const parsedContactsData = JSON.parse(localStorage.getItem('contactsData'))
+    const [contactsData, setContactsData] = useState(parsedContactsData || [])
+
+    useEffect(() => {
+        setContactsData(parsedContactsData)
+    }, [isLoaded])
 
     const handleSearch = (event) => {
         setSearchName(event.target.value)
     }
 
-    const setToStorage = () => {
-        requestedContactsData.map((contact) => {
-            let person = JSON.stringify({
-                id: contact.id,
-                name: contact.name,
-                address: contact.address.city,
-                website: contact.website,
-                phone: contact.phone,
-                company: contact.company.name,
-                avatar: contact.avatar,
-                favorite: contact.favorite,
-            })
-            return localStorage.setItem(`${contact.id}`, person)
-        })
-    }
-
     const renderSearchedContacts = () => {
-        let searchContact = parseContactsData.filter((el) => {
+        let searchContact = contactsData.filter((el) => {
             return el.name.toLowerCase().indexOf(searchName.toLowerCase()) > -1
         })
 
@@ -81,31 +73,19 @@ const ContactList = () => {
             )
         })
     }
-
-    // when we get json from url, we should set data on localStorage
+    
+    // check if the data is loaded
     //
-    React.useEffect(() => {
-        setToStorage()
-    }, [requestedContactsData])
 
-    // check whether to make a request to the server or use data from the local storage
-    //
-    if (localStorage.length === 0) {
-        getDataFromUrl()
-    } else {
-        let keys = Object.keys(localStorage)
-        for (let key of keys) {
-            parseContactsData.push(JSON.parse(localStorage.getItem(key)))
-        }
+    if (contactsData) {
+        contactsData.sort(function (a, b) {
+            let nameA = a.name.toLowerCase()
+            let nameB = b.name.toLowerCase()
+            if (nameA < nameB) return -1
+            if (nameA > nameB) return 1
+            return 0
+        })
     }
-
-    parseContactsData.sort(function (a, b) {
-        let nameA = a.name.toLowerCase()
-        let nameB = b.name.toLowerCase()
-        if (nameA < nameB) return -1
-        if (nameA > nameB) return 1
-        return 0
-    })
 
     // creating object  with keys (from letters array)  for grouping contacts by first letter
     //
@@ -124,21 +104,22 @@ const ContactList = () => {
 
     // filling the array with contacts by their first letter of the name
     //
-    
+
     const groupContacts = () => {
-        for (let i = 0; i < parseContactsData.length; i++) {
-            const element = parseContactsData[i]
+        for (let i = 0; i < contactsData.length; i++) {
+            const element = contactsData[i]
 
             let firstLetter = element.name.toLowerCase().slice(0, 1)
             groupByLetter[firstLetter].push(element)
         }
     }
 
-    groupContacts()
+    // check if the data is loaded
+    //
 
-    // TODO:
-    // 1. Add styles
-
+    if (contactsData) {
+        groupContacts()
+    }
     return (
         <div>
             <div>
@@ -153,9 +134,17 @@ const ContactList = () => {
                     Clear search
                 </button>
             </div>
-            {!searchName
-                ? renderGroupedContactsByName()
-                : renderSearchedContacts()}
+
+            {/* check if the data is loaded */}
+            {isLoaded ? (
+                !searchName ? (
+                    renderGroupedContactsByName()
+                ) : (
+                    renderSearchedContacts()
+                )
+            ) : (
+                <div>Load...</div>
+            )}
         </div>
     )
 }
