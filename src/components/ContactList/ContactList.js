@@ -124,13 +124,13 @@ const ContactList = () => {
 
     // filling the array with contacts by their first letter of the name
     //
+    
     const groupContacts = () => {
         for (let i = 0; i < parseContactsData.length; i++) {
             const element = parseContactsData[i]
 
             let firstLetter = element.name.toLowerCase().slice(0, 1)
-                    groupByLetter[firstLetter].push(element)
-                
+            groupByLetter[firstLetter].push(element)
         }
     }
 
