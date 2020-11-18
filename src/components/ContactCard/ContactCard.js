@@ -3,10 +3,10 @@ import Modal from 'react-modal'
 import './ContactCard.css'
 
 const ContactCard = (data) => {
-    let [person, setPerson] = useState(data.person)
-    let [showModal, setShowModal] = useState(false)
-    let [isEditing, setIsEditing] = useState(false)
-    let [isEdited, setIsEdited] = useState(false)
+    const [person, setPerson] = useState(data.person)
+    const [showModal, setShowModal] = useState(false)
+    const [isEditing, setIsEditing] = useState(false)
+    const [isEdited, setIsEdited] = useState(false)
     const [isFavoriteStyle, setIsFavoriteStyle] = useState(person.favorite)
 
     useEffect(() => {
@@ -158,7 +158,7 @@ const ContactCard = (data) => {
                                 <div className="modal-text">
                                     {person.address.city}
                                 </div>
-                                <a
+                                <a  
                                     href={`https://${person.website}`}
                                     className="modal-text"
                                 >

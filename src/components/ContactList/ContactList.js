@@ -18,7 +18,6 @@ const ContactList = () => {
             if (xhr.status !== 200) {
                 alert(`Error ${xhr.status}: ${xhr.statusText}`)
             } else {
-                console.log('xhr data saved to local')
                 localStorage.setItem(
                     'contactsData',
                     JSON.stringify(xhr.response)
