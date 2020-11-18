@@ -7,7 +7,7 @@ const ContactCard = (data) => {
     let [showModal, setShowModal] = useState(false)
     let [isEditing, setIsEditing] = useState(false)
     let [isEdited, setIsEdited] = useState(false)
-    const [isFavorite, setIsFavorite] = useState(person.favorite)
+    const [isFavoriteStyle, setIsFavoriteStyle] = useState(person.favorite)
 
     useEffect(() => {
         const update = () => {
@@ -39,11 +39,10 @@ const ContactCard = (data) => {
 
     const handleSaveChanges = () => {
         const pendingData = JSON.parse(localStorage.getItem('contactsData'))
-        let id = pendingData.find(contact => contact.id === person.id).id
-        console.log(pendingData[id]);
+        let id = pendingData.find((contact) => contact.id === person.id).id
+        console.log(pendingData[id])
         pendingData[id] = person
-        console.log(pendingData[id]);
-        // console.log(contactsData);
+        console.log(pendingData[id])
         localStorage.setItem('contactsData', JSON.stringify(pendingData))
         // here we send 'post' request on the server
         setIsEdited(true)
@@ -51,21 +50,50 @@ const ContactCard = (data) => {
     }
 
     const handleChangeContactData = (event) => {
-        console.log(event);
+        console.log(event)
         event.preventDefault()
         let name = event.target.name
         let value = event.target.value
         let obj = { ...person }
         let keys = Object.keys(person)
-        
+
         for (let i = 0; i < keys.length; i++) {
             const field = keys[i]
             if (field === name) {
                 obj[field] = value
             }
         }
-        console.log({obj});
+        console.log({ obj })
         setPerson(obj)
+    }
+
+    const renderFavoriteButtons = () => {
+        return (
+            <div className="favorite-block">
+                <button
+                    className="favorite-button enable"
+                    name="favorite"
+                    value={true}
+                    onClick={(event) => {
+                        setIsFavoriteStyle(true)
+                        handleChangeContactData(event)
+                    }}
+                >
+                    favorite
+                </button>
+                <button
+                    className="favorite-button disable"
+                    name="favorite"
+                    value={false}
+                    onClick={(event) => {
+                        setIsFavoriteStyle(false)
+                        handleChangeContactData(event)
+                    }}
+                >
+                    unfavorite
+                </button>
+            </div>
+        )
     }
 
     const renderInputFields = () => {
@@ -100,7 +128,7 @@ const ContactCard = (data) => {
     return (
         <div className="item">
             <div
-                className={person.favorite ? 'card favorite' : 'card '}
+                className={`card favorite-${isFavoriteStyle}`}
                 key={person.id}
                 onClick={handleOpenModal}
             >
@@ -140,28 +168,7 @@ const ContactCard = (data) => {
                         ) : (
                             <div className="modal-content">
                                 <img alt={person.name} src={person.avatar} />
-                                <input
-                                    type="button"
-                                    name="favorite"
-                                    value={isFavorite}
-                                    onClick={(event) =>
-                                        handleChangeContactData(event)
-                                    }
-                                />
-                                
-                                {/* <label className="favorite-button ">
-                                    Favorite
-                                    <input
-                                        type="checkbox"
-                                        value={person.favorite}
-                                        name='favorite'
-                                        onChange={(event) =>
-                                            handleChangeContactData(
-                                                event
-                                            )
-                                        }
-                                    />
-                                </label> */}
+                                {renderFavoriteButtons()}
                                 {renderInputFields()}
                             </div>
                         )}

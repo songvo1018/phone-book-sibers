@@ -13,13 +13,21 @@
 .card {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 2px;
   padding: 8px 0 10px;
   font-size: 14px;
+  border-radius: 4px;
   border-bottom: 1px solid #dadada;
 }
 
-.favorite {
+.favorite-true {
+  background-color: rgb(253, 249, 231);
   border-bottom: 4px solid orange;
+}
+
+.favorite-false {
+  background: rgb(255, 255, 255);
+  border-bottom: none;
 }
 
 .card :hover {
@@ -30,7 +38,7 @@
 .modal {
   max-width: 280px;
   margin: 0 auto;
-  margin-top: 10px;
+  margin-top: 30px;
   min-height: 400px;
   background-color: #f8f8f8ed;
   border-radius: 2px;
@@ -98,6 +106,12 @@
 
 .edit,
 .save {
+  margin: 10px;
+}
+
+.edit,
+.save,
+.favorite-button {
   background: none;
   border: none;
   border-bottom: 1px solid #bababa;
@@ -106,16 +120,24 @@
 }
 
 .edit,
+.favorite-button,
 .save:hover {
   cursor: pointer;
 }
 
 .edit,
-.save :focus,
+.save,
 :focus-visible {
   outline: none;
 }
 
+.enable {
+  color: green;
+}
+
+.disable {
+  color: rgb(255, 115, 115)
+}
 img {
   border-radius: 50%;
   margin: 10px;

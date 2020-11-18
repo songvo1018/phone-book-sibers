@@ -33,8 +33,8 @@ input,
 }
 
 .favorite-button:hover {
-  background: orange;
-  transition: 1s;
+  /* background: orange; */
+  transition: 0.2s;
 }
 
 .clear:hover {

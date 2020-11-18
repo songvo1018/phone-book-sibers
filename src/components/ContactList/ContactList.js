@@ -7,7 +7,7 @@ const ContactList = () => {
     const xhr = new XMLHttpRequest()
     const [isLoaded, setIsLoaded] = useState(false)
     const [isRenderFavorite, setIsRenderFavorite] = useState(false)
-    let [searchName, setSearchName] = useState(``)
+    const [searchName, setSearchName] = useState(``)
     const [contactsData, setContactsData] = useState([])
 
     const getDataFromUrl = () => {
@@ -49,6 +49,9 @@ const ContactList = () => {
         } else {
             IsLoadedAfterCheck()
         }
+    })
+
+    useEffect(() => {
         const parsedContactsData = JSON.parse(
             localStorage.getItem('contactsData')
         )
@@ -62,11 +65,9 @@ const ContactList = () => {
     }
 
     const renderFavoriteContacts = () => {
-        return contactsData.map((contact) => {
-            if (contact.favorite) {
-                return <ContactCard key={contact.id} person={contact} />
-            }
-        })
+        return contactsData
+            .filter((contact) => contact.favorite === true)
+            .map((contact) => <ContactCard key={contact.id} person={contact} />)
     }
 
     const renderSearchedContacts = () => {
