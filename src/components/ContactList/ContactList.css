@@ -1,12 +1,13 @@
 .group {
-  padding: 16px;
+  padding: 16px 0;
 }
 
 .list-header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: flex-start;
   margin: 0 auto;
-  max-width: 320px;
+  max-width: 300px;
 }
 
 .favorite-button {
@@ -44,13 +45,14 @@ input,
 
 @media only screen and (min-width: 400px) {
   .list-header {
-  max-width: 390px;
+    display: flex;
+    max-width: 390px;
   }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
   .list-header {
-  max-width: 460px;
+    max-width: 460px;
   }
 }
