@@ -49,16 +49,10 @@ const ContactList = () => {
         }
     }
 
-    const IsLoadedAfterCheck = () => {
-        if (!isLoaded) {
-            setIsLoaded(true)
-        }
-    }
-
     useEffect(() => {
         if (!contactsData.length) {
             getDataFromUrl()
-        } 
+        }
     }, [])
 
     
@@ -67,8 +61,9 @@ const ContactList = () => {
     }
 
     const renderFavoriteContacts = () => {
+        debugger
         return contactsData
-            .filter((contact) => contact.favorite === true)
+            .filter((contact) => contact.favorite)
             .map((contact) => <ContactCard key={contact.id} person={contact} />)
     }
 
