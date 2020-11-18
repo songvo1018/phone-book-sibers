@@ -7,6 +7,7 @@ const ContactCard = (data) => {
     let [showModal, setShowModal] = useState(false)
     let [isEditing, setIsEditing] = useState(false)
     let [isEdited, setIsEdited] = useState(false)
+    const [isFavorite, setIsFavorite] = useState(person.favorite)
 
     useEffect(() => {
         const update = () => {
@@ -37,26 +38,33 @@ const ContactCard = (data) => {
     }
 
     const handleSaveChanges = () => {
-        localStorage.setItem(`${person.id}`, JSON.stringify(person))
+        const pendingData = JSON.parse(localStorage.getItem('contactsData'))
+        let id = pendingData.find(contact => contact.id === person.id).id
+        console.log(pendingData[id]);
+        pendingData[id] = person
+        console.log(pendingData[id]);
+        // console.log(contactsData);
+        localStorage.setItem('contactsData', JSON.stringify(pendingData))
         // here we send 'post' request on the server
         setIsEdited(true)
         setIsEditing(false)
     }
 
     const handleChangeContactData = (event) => {
+        console.log(event);
         event.preventDefault()
         let name = event.target.name
         let value = event.target.value
-
         let obj = { ...person }
         let keys = Object.keys(person)
-
+        
         for (let i = 0; i < keys.length; i++) {
             const field = keys[i]
             if (field === name) {
                 obj[field] = value
             }
         }
+        console.log({obj});
         setPerson(obj)
     }
 
@@ -71,7 +79,6 @@ const ContactCard = (data) => {
         }
         let inputs = []
 
-        console.log(Object.keys(inputNames))
         Object.keys(inputNames).map((name) => {
             return inputs.push(
                 <input
@@ -87,22 +94,6 @@ const ContactCard = (data) => {
                 />
             )
         })
-        // inputNames.map((name) =>{
-        //     console.log(person[name[0]])
-        //     inputs.push(
-        //         <input
-        //             placeholder={name[1]}
-        //             key={name[0]}
-        //             name={name[0]}
-        //             type="text"
-        //             value={person[name[0]]}
-        //             onChange={(event) => {
-        //                 handleChangeContactData(event)
-        //             }}
-        //             className="modal-input"
-        //         />
-        //     )
-        // })
         return <div>{inputs}</div>
     }
 
@@ -149,6 +140,28 @@ const ContactCard = (data) => {
                         ) : (
                             <div className="modal-content">
                                 <img alt={person.name} src={person.avatar} />
+                                <input
+                                    type="button"
+                                    name="favorite"
+                                    value={isFavorite}
+                                    onClick={(event) =>
+                                        handleChangeContactData(event)
+                                    }
+                                />
+                                
+                                {/* <label className="favorite-button ">
+                                    Favorite
+                                    <input
+                                        type="checkbox"
+                                        value={person.favorite}
+                                        name='favorite'
+                                        onChange={(event) =>
+                                            handleChangeContactData(
+                                                event
+                                            )
+                                        }
+                                    />
+                                </label> */}
                                 {renderInputFields()}
                             </div>
                         )}

@@ -2,6 +2,17 @@
   padding: 16px;
 }
 
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 390px;
+}
+
+.favorite-button {
+  font-size: 14px;
+}
+
 hr {
   border: 0;
   height: 0;
@@ -10,20 +21,20 @@ hr {
   max-width: 260px;
 }
 
-input {
+input,
+.favorite-button,
+.clear  {
   padding: 16px 22px 12px 8px;
   border: none;
   border-bottom: 1px solid #bababa;
   margin-bottom: 4px;
   border-radius: 4px;
+  background: none;
 }
 
-.clear {
-  background: none;
-  border: none;
-  border-bottom: 1px solid #bababa;
-  border-radius: 4px;
-  padding: 16px 22px 12px 8px;
+.favorite-button:hover {
+  background: orange;
+  transition: 1s;
 }
 
 .clear:hover {

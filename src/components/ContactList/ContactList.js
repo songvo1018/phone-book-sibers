@@ -6,6 +6,10 @@ const DATA_URL = 'http://demo.sibers.com/users'
 const ContactList = () => {
     const xhr = new XMLHttpRequest()
     const [isLoaded, setIsLoaded] = useState(false)
+    const [isRenderFavorite, setIsRenderFavorite] = useState(false)
+    let [searchName, setSearchName] = useState(``)
+    const [contactsData, setContactsData] = useState([])
+
     const getDataFromUrl = () => {
         xhr.open('GET', DATA_URL)
         xhr.responseType = 'json'
@@ -14,12 +18,18 @@ const ContactList = () => {
             if (xhr.status !== 200) {
                 alert(`Error ${xhr.status}: ${xhr.statusText}`)
             } else {
+                console.log('xhr data saved to local')
                 localStorage.setItem(
                     'contactsData',
                     JSON.stringify(xhr.response)
                 )
-                setIsLoaded(true)
+
                 return
+            }
+        }
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                setIsLoaded(true)
             }
         }
         xhr.onerror = function () {
@@ -27,22 +37,40 @@ const ContactList = () => {
         }
     }
 
-    getDataFromUrl()
-
-    let [searchName, setSearchName] = useState(``)
-    const parsedContactsData = JSON.parse(localStorage.getItem('contactsData'))
-    const [contactsData, setContactsData] = useState(parsedContactsData || [])
+    const IsLoadedAfterCheck = () => {
+        if (!isLoaded) {
+            setIsLoaded(true)
+        }
+    }
 
     useEffect(() => {
-        setContactsData(parsedContactsData)
+        if (!localStorage.getItem('contactsData')) {
+            getDataFromUrl()
+        } else {
+            IsLoadedAfterCheck()
+        }
+        const parsedContactsData = JSON.parse(
+            localStorage.getItem('contactsData')
+        )
+        if (isLoaded) {
+            setContactsData(parsedContactsData)
+        }
     }, [isLoaded])
 
     const handleSearch = (event) => {
         setSearchName(event.target.value)
     }
 
+    const renderFavoriteContacts = () => {
+        return contactsData.map((contact) => {
+            if (contact.favorite) {
+                return <ContactCard key={contact.id} person={contact} />
+            }
+        })
+    }
+
     const renderSearchedContacts = () => {
-        let searchContact = contactsData.filter((el) => {
+        const searchContact = contactsData.filter((el) => {
             return el.name.toLowerCase().indexOf(searchName.toLowerCase()) > -1
         })
 
@@ -71,19 +99,6 @@ const ContactList = () => {
                     ) : null}
                 </div>
             )
-        })
-    }
-    
-    // check if the data is loaded
-    //
-
-    if (contactsData) {
-        contactsData.sort(function (a, b) {
-            let nameA = a.name.toLowerCase()
-            let nameB = b.name.toLowerCase()
-            if (nameA < nameB) return -1
-            if (nameA > nameB) return 1
-            return 0
         })
     }
 
@@ -118,11 +133,21 @@ const ContactList = () => {
     //
 
     if (contactsData) {
+        contactsData.sort(function (a, b) {
+            let nameA = a.name.toLowerCase()
+            let nameB = b.name.toLowerCase()
+            if (nameA < nameB) return -1
+            if (nameA > nameB) return 1
+            return 0
+        })
+    }
+    if (contactsData.length !== 0) {
         groupContacts()
     }
+
     return (
         <div>
-            <div>
+            <div className="list-header">
                 <input
                     autoFocus
                     type="text"
@@ -133,12 +158,23 @@ const ContactList = () => {
                 <button className="clear" onClick={() => setSearchName('')}>
                     Clear search
                 </button>
+                <label className="favorite-button ">
+                    Favorite
+                    <input
+                        type="checkbox"
+                        onClick={() => setIsRenderFavorite(!isRenderFavorite)}
+                    />
+                </label>
             </div>
 
             {/* check if the data is loaded */}
             {isLoaded ? (
                 !searchName ? (
-                    renderGroupedContactsByName()
+                    !isRenderFavorite ? (
+                        renderGroupedContactsByName()
+                    ) : (
+                        renderFavoriteContacts()
+                    )
                 ) : (
                     renderSearchedContacts()
                 )
