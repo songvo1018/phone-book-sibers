@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './ContactList.css'
 import ContactCard from '../ContactCard/ContactCard'
+
 const DATA_URL = 'http://demo.sibers.com/users'
 
 const ContactList = () => {
@@ -8,29 +9,39 @@ const ContactList = () => {
     const [isLoaded, setIsLoaded] = useState(false)
     const [isRenderFavorite, setIsRenderFavorite] = useState(false)
     const [searchName, setSearchName] = useState(``)
-    const [contactsData, setContactsData] = useState([])
+    const parsedContactsData = JSON.parse(
+        localStorage.getItem('contactsData')
+    )
+    const [contactsData, setContactsData] = useState(parsedContactsData || [])
 
     const getDataFromUrl = () => {
         xhr.open('GET', DATA_URL)
         xhr.responseType = 'json'
         xhr.send()
         xhr.onload = function () {
-            if (xhr.status !== 200) {
-                alert(`Error ${xhr.status}: ${xhr.statusText}`)
-            } else {
-                localStorage.setItem(
-                    'contactsData',
-                    JSON.stringify(xhr.response)
-                )
-
-                return
-            }
-        }
-        xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
-                setIsLoaded(true)
-            }
+                if (xhr.status === 200) {
+                    const data = xhr.response.map(contact => {
+                        return {
+                            name: contact.name,
+                            phone: contact.phone,
+                            city: contact.address.city,
+                            company: contact.company.name,
+                            website: contact.website,
+                            avatar: contact.avatar,
+                        }
+                    })
+                    localStorage.setItem(
+                        'contactsData',
+                        JSON.stringify(data)
+                    )
+                    setContactsData(data)
+                    setIsLoaded(true)
+                return
+            } 
+            alert(`Error ${xhr.status}: ${xhr.statusText}`)
         }
+    }
         xhr.onerror = function () {
             console.log('Error. Request failed.')
         }
@@ -43,22 +54,12 @@ const ContactList = () => {
     }
 
     useEffect(() => {
-        if (!localStorage.getItem('contactsData')) {
+        if (!contactsData.length) {
             getDataFromUrl()
-        } else {
-            IsLoadedAfterCheck()
-        }
-    })
+        } 
+    }, [])
 
-    useEffect(() => {
-        const parsedContactsData = JSON.parse(
-            localStorage.getItem('contactsData')
-        )
-        if (isLoaded) {
-            setContactsData(parsedContactsData)
-        }
-    }, [isLoaded])
-
+    
     const handleSearch = (event) => {
         setSearchName(event.target.value)
     }
@@ -106,16 +107,16 @@ const ContactList = () => {
     //
     const alphabet = []
     function genCharArray(charA, charZ) {
-        let i = charA.charCodeAt(0),
-            j = charZ.charCodeAt(0)
+        let i = charA.charCodeAt(0)
+        let j = charZ.charCodeAt(0)
         for (; i <= j; ++i) {
             alphabet.push([String.fromCharCode(i), []])
         }
         return alphabet
     }
-    let entries = new Map(genCharArray('a', 'z'))
+    const entries = new Map(genCharArray('a', 'z'))
 
-    let groupByLetter = Object.fromEntries(entries)
+    const groupByLetter = Object.fromEntries(entries)
 
     // filling the array with contacts by their first letter of the name
     //
@@ -124,7 +125,7 @@ const ContactList = () => {
         for (let i = 0; i < contactsData.length; i++) {
             const element = contactsData[i]
 
-            let firstLetter = element.name.toLowerCase().slice(0, 1)
+            const firstLetter = element.name.toLowerCase().slice(0, 1)
             groupByLetter[firstLetter].push(element)
         }
     }
@@ -168,7 +169,7 @@ const ContactList = () => {
             </div>
 
             {/* check if the data is loaded */}
-            {isLoaded ? (
+            {contactsData.length ? (
                 !searchName ? (
                     !isRenderFavorite ? (
                         renderGroupedContactsByName()
