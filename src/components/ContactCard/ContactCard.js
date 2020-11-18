@@ -39,10 +39,8 @@ const ContactCard = (data) => {
 
     const handleSaveChanges = () => {
         const pendingData = JSON.parse(localStorage.getItem('contactsData'))
-        let id = pendingData.find((contact) => contact.id === person.id).id
-        console.log(pendingData[id])
+        const id = pendingData.find((contact) => contact.id === person.id).id
         pendingData[id] = person
-        console.log(pendingData[id])
         localStorage.setItem('contactsData', JSON.stringify(pendingData))
         // here we send 'post' request on the server
         setIsEdited(true)
@@ -50,12 +48,11 @@ const ContactCard = (data) => {
     }
 
     const handleChangeContactData = (event) => {
-        console.log(event)
         event.preventDefault()
-        let name = event.target.name
-        let value = event.target.value
-        let obj = { ...person }
-        let keys = Object.keys(person)
+        const name = event.target.name
+        const value = event.target.value
+        const obj = { ...person }
+        const keys = Object.keys(person)
 
         for (let i = 0; i < keys.length; i++) {
             const field = keys[i]
@@ -63,7 +60,6 @@ const ContactCard = (data) => {
                 obj[field] = value
             }
         }
-        console.log({ obj })
         setPerson(obj)
     }
 
@@ -97,6 +93,7 @@ const ContactCard = (data) => {
     }
 
     const renderInputFields = () => {
+        //
         const inputNames = {
             name: person.name,
             phone: person.phone,
@@ -105,7 +102,7 @@ const ContactCard = (data) => {
             website: person.website,
             avatar: person.avatar,
         }
-        let inputs = []
+        const inputs = []
 
         Object.keys(inputNames).map((name) => {
             return inputs.push(
@@ -158,7 +155,7 @@ const ContactCard = (data) => {
                                 <div className="modal-text">
                                     {person.address.city}
                                 </div>
-                                <a  
+                                <a
                                     href={`https://${person.website}`}
                                     className="modal-text"
                                 >

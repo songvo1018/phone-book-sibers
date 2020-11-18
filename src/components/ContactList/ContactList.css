@@ -6,7 +6,7 @@
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
-  max-width: 390px;
+  max-width: 320px;
 }
 
 .favorite-button {
@@ -40,4 +40,17 @@ input,
 .clear:hover {
   background: #bababa;
   transition: 0.3s;
+}
+
+@media only screen and (min-width: 400px) {
+  .list-header {
+  max-width: 390px;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .list-header {
+  max-width: 900px;
+  }
 }

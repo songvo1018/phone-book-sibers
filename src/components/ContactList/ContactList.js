@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './ContactList.css'
 import ContactCard from '../ContactCard/ContactCard'
+
 const DATA_URL = 'http://demo.sibers.com/users'
 
 const ContactList = () => {
@@ -106,16 +107,16 @@ const ContactList = () => {
     //
     const alphabet = []
     function genCharArray(charA, charZ) {
-        let i = charA.charCodeAt(0),
-            j = charZ.charCodeAt(0)
+        let i = charA.charCodeAt(0)
+        let j = charZ.charCodeAt(0)
         for (; i <= j; ++i) {
             alphabet.push([String.fromCharCode(i), []])
         }
         return alphabet
     }
-    let entries = new Map(genCharArray('a', 'z'))
+    const entries = new Map(genCharArray('a', 'z'))
 
-    let groupByLetter = Object.fromEntries(entries)
+    const groupByLetter = Object.fromEntries(entries)
 
     // filling the array with contacts by their first letter of the name
     //
@@ -124,7 +125,7 @@ const ContactList = () => {
         for (let i = 0; i < contactsData.length; i++) {
             const element = contactsData[i]
 
-            let firstLetter = element.name.toLowerCase().slice(0, 1)
+            const firstLetter = element.name.toLowerCase().slice(0, 1)
             groupByLetter[firstLetter].push(element)
         }
     }
