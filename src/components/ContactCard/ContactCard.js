@@ -91,14 +91,13 @@ const ContactCard = (data) => {
             </div>
         )
     }
-
     const renderInputFields = () => {
         //
         const inputNames = {
             name: person.name,
             phone: person.phone,
-            city: person.address.city,
-            company: person.company.name,
+            city: person.city,
+            company: person.company,
             website: person.website,
             avatar: person.avatar,
         }
@@ -150,10 +149,10 @@ const ContactCard = (data) => {
                                 <div className="modal-text">{person.name}</div>
                                 <div className="modal-text">{person.phone}</div>
                                 <div className="modal-text">
-                                    {person.company.name}
+                                    {person.company}
                                 </div>
                                 <div className="modal-text">
-                                    {person.address.city}
+                                    {person.city}
                                 </div>
                                 <a
                                     href={`https://${person.website}`}

@@ -9,29 +9,39 @@ const ContactList = () => {
     const [isLoaded, setIsLoaded] = useState(false)
     const [isRenderFavorite, setIsRenderFavorite] = useState(false)
     const [searchName, setSearchName] = useState(``)
-    const [contactsData, setContactsData] = useState([])
+    const parsedContactsData = JSON.parse(
+        localStorage.getItem('contactsData')
+    )
+    const [contactsData, setContactsData] = useState(parsedContactsData || [])
 
     const getDataFromUrl = () => {
         xhr.open('GET', DATA_URL)
         xhr.responseType = 'json'
         xhr.send()
         xhr.onload = function () {
-            if (xhr.status !== 200) {
-                alert(`Error ${xhr.status}: ${xhr.statusText}`)
-            } else {
-                localStorage.setItem(
-                    'contactsData',
-                    JSON.stringify(xhr.response)
-                )
-
-                return
-            }
-        }
-        xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
-                setIsLoaded(true)
-            }
+                if (xhr.status === 200) {
+                    const data = xhr.response.map(contact => {
+                        return {
+                            name: contact.name,
+                            phone: contact.phone,
+                            city: contact.address.city,
+                            company: contact.company.name,
+                            website: contact.website,
+                            avatar: contact.avatar,
+                        }
+                    })
+                    localStorage.setItem(
+                        'contactsData',
+                        JSON.stringify(data)
+                    )
+                    setContactsData(data)
+                    setIsLoaded(true)
+                return
+            } 
+            alert(`Error ${xhr.status}: ${xhr.statusText}`)
         }
+    }
         xhr.onerror = function () {
             console.log('Error. Request failed.')
         }
@@ -44,22 +54,12 @@ const ContactList = () => {
     }
 
     useEffect(() => {
-        if (!localStorage.getItem('contactsData')) {
+        if (!contactsData.length) {
             getDataFromUrl()
-        } else {
-            IsLoadedAfterCheck()
-        }
-    })
+        } 
+    }, [])
 
-    useEffect(() => {
-        const parsedContactsData = JSON.parse(
-            localStorage.getItem('contactsData')
-        )
-        if (isLoaded) {
-            setContactsData(parsedContactsData)
-        }
-    }, [isLoaded])
-
+    
     const handleSearch = (event) => {
         setSearchName(event.target.value)
     }
@@ -169,7 +169,7 @@ const ContactList = () => {
             </div>
 
             {/* check if the data is loaded */}
-            {isLoaded ? (
+            {contactsData.length ? (
                 !searchName ? (
                     !isRenderFavorite ? (
                         renderGroupedContactsByName()
