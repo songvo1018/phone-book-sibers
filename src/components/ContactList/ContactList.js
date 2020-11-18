@@ -29,6 +29,8 @@ const ContactList = () => {
                             company: contact.company.name,
                             website: contact.website,
                             avatar: contact.avatar,
+                            favorite: contact.favorite,
+                            id: contact.id
                         }
                     })
                     localStorage.setItem(
