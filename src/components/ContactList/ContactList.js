@@ -61,9 +61,8 @@ const ContactList = () => {
     }
 
     const renderFavoriteContacts = () => {
-        debugger
         return contactsData
-            .filter((contact) => contact.favorite)
+            .filter((contact) => contact.favorite === true || contact.favorite === "true")
             .map((contact) => <ContactCard key={contact.id} person={contact} />)
     }
 
