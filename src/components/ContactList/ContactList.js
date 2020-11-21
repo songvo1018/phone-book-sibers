@@ -29,6 +29,8 @@ const ContactList = () => {
                             company: contact.company.name,
                             website: contact.website,
                             avatar: contact.avatar,
+                            favorite: contact.favorite,
+                            id: contact.id
                         }
                     })
                     localStorage.setItem(
@@ -47,16 +49,10 @@ const ContactList = () => {
         }
     }
 
-    const IsLoadedAfterCheck = () => {
-        if (!isLoaded) {
-            setIsLoaded(true)
-        }
-    }
-
     useEffect(() => {
         if (!contactsData.length) {
             getDataFromUrl()
-        } 
+        }
     }, [])
 
     
@@ -66,7 +62,7 @@ const ContactList = () => {
 
     const renderFavoriteContacts = () => {
         return contactsData
-            .filter((contact) => contact.favorite === true)
+            .filter((contact) => contact.favorite === true || contact.favorite === "true")
             .map((contact) => <ContactCard key={contact.id} person={contact} />)
     }
 

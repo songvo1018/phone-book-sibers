@@ -7,6 +7,7 @@
   flex-direction: column;
   justify-content: flex-start;
   margin: 0 auto;
+  margin-top: 20px;
   max-width: 300px;
 }
 
@@ -46,6 +47,8 @@ input,
 @media only screen and (min-width: 400px) {
   .list-header {
     display: flex;
+    justify-content: space-between;
+    flex-direction: row;
     max-width: 390px;
   }
 }

@@ -20,9 +20,11 @@
   border-bottom: 1px solid #dadada;
 }
 
-.favorite-true {
+/* apply favorite style to card only */
+.card .favorite-true {
   background-color: rgb(253, 249, 231);
   border-bottom: 4px solid orange;
+
 }
 
 .favorite-false {
@@ -147,7 +149,7 @@ img {
   .modal {
     max-width: 500px;
     border-radius: 8px;
-    margin-top: 120px;
+    margin-top: 50px;
     min-height: 400px;
   }
 
