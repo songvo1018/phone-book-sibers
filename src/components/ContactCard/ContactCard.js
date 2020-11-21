@@ -2,15 +2,43 @@ import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import './ContactCard.css'
 
-const ContactCard = (data) => {
-    const [person, setPerson] = useState(data.person)
+const INPUTS = [    'name',
+    'phone',
+    'city',
+    'company',
+    'website',
+    'avatar'
+]
+
+const ContactCard = ({person}) => {
+    const [formData, setFormData] = useState({});
     const [showModal, setShowModal] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
     const [isEdited, setIsEdited] = useState(false)
+    // remove this state
     const [isFavoriteStyle, setIsFavoriteStyle] = useState(person.favorite)
+    // call this in another way
+
+    // example of form data
+    const initialFormData = () => {
+        const result = {};
+        INPUTS.forEach(key => {
+            result[key] = {
+                value: currentInputValue,
+                initialValue: currentInputValue,
+                error: null
+            }
+        })
+        setFormData(result);
+    }
+
+
+
+
 
     useEffect(() => {
         const update = () => {
+            // call method from parent
             setPerson(data.person)
         }
         update()
@@ -33,15 +61,23 @@ const ContactCard = (data) => {
     }
 
     const handleEditContact = () => {
-        setIsEditing(true)
+        initialFormData()
         setIsEdited(false)
     }
 
-    const handleSaveChanges = () => {
-        const pendingData = JSON.parse(localStorage.getItem('contactsData'))
-        const id = pendingData.find((contact) => contact.id === person.id).id
-        pendingData[id] = person
-        localStorage.setItem('contactsData', JSON.stringify(pendingData))
+
+    // move this function to parent
+    const handleSaveChanges = (changedContact) => {
+        const contactsData = JSON.parse(localStorage.getItem('contactsData'))
+        if (contactsData) {
+            const currentPerson = contactsData.find((contact) => contact.id === changedContact.id);
+            if (currentPerson) {
+                contactsData[currentPerson.id] = changedContact;
+                localStorage.setItem('contactsData', JSON.stringify(contactsData))
+            }
+            
+        }
+
         // here we send 'post' request on the server
         setIsEdited(true)
         setIsEditing(false)
@@ -60,17 +96,21 @@ const ContactCard = (data) => {
                 obj[field] = value
             }
         }
+
+        // pay attention to naming of variables of person/contact. And call function from parent to change contacts data
         setPerson(obj)
     }
 
     const renderFavoriteButtons = () => {
         return (
+            // remove extra button and add necessary condtions to attributes and calling handler
             <div className="favorite-block">
                 <button
                     className="favorite-button enable"
                     name="favorite"
                     value={true}
                     onClick={(event) => {
+                        // remove calling this method
                         setIsFavoriteStyle(true)
                         handleChangeContactData(event)
                     }}
@@ -82,6 +122,7 @@ const ContactCard = (data) => {
                     name="favorite"
                     value={false}
                     onClick={(event) => {
+                         // remove calling this method
                         setIsFavoriteStyle(false)
                         handleChangeContactData(event)
                     }}
@@ -93,38 +134,34 @@ const ContactCard = (data) => {
     }
     const renderInputFields = () => {
         //
-        const inputNames = {
-            name: person.name,
-            phone: person.phone,
-            city: person.city,
-            company: person.company,
-            website: person.website,
-            avatar: person.avatar,
-        }
-        const inputs = []
 
-        Object.keys(inputNames).map((name) => {
+        const inputFields = []
+
+        INPUTS.map((input) => {
             return inputs.push(
                 <input
-                    placeholder={name}
-                    key={name}
-                    name={name}
+                    // first letter to upper case
+                    placeholder={input}
+                    key={input}
+                    name={input}
                     type="text"
-                    value={inputNames[name]}
+                    value={formData[input].value}
                     onChange={(event) => {
                         handleChangeContactData(event)
                     }}
+                    // change naming of class name
                     className="modal-input"
                 />
             )
         })
-        return <div>{inputs}</div>
+        return <div>{inputFields}</div>
     }
 
     return (
         <div className="item">
-            <div
-                className={`card favorite-${isFavoriteStyle}`}
+            <div 
+                // replace isFavoriteStyle to favorite field value from person prop
+                className={`card${person.favorite && ' favorite'}`}
                 key={person.id}
                 onClick={handleOpenModal}
             >
@@ -163,6 +200,7 @@ const ContactCard = (data) => {
                             </div>
                         ) : (
                             <div className="modal-content">
+                                {/* https://vincenttaverna.com/posts/react-image-hook/ */}
                                 <img alt={person.name} src={person.avatar} />
                                 {renderFavoriteButtons()}
                                 {renderInputFields()}
@@ -193,11 +231,11 @@ const ContactCard = (data) => {
                                 Edit contact
                             </button>
                         )}
-                        {isEdited ? (
+                        {isEdited && (
                             <span className="edited-message">
                                 Changes saved
                             </span>
-                        ) : null}
+                        )}
                     </div>
                 </div>
             </Modal>
