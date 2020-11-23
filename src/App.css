@@ -9,15 +9,23 @@ html, body {
   padding-top: 40px;
   font-family: 'Roboto', sans-serif;
 }
-
-button {
+.App-header {
+  font-size: 14px;
+}
+button, input{
   font-family: 'Roboto', sans-serif;
+  border: none;
+  background: none;
+  font-size: 14px;
 }
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 400px) {
   .App {
     text-align: center;
     min-width: 390px;
+  }
+  .App-header {
+    font-size: 18px;
   }
 }
 
@@ -26,5 +34,8 @@ button {
   .App {
     text-align: center;
     min-width: 900px;
+  }
+  .App-header {
+    font-size: 24px;
   }
 }

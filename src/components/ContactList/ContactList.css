@@ -11,8 +11,40 @@
   max-width: 300px;
 }
 
-.favorite-button {
+.list-header label {
+  margin: 0 auto;
+  border: none;
+  border-bottom: 1px solid #bababa;
+  border-radius: 8px;
+}
+
+
+.header-actions {
+  padding: 8px 12px 4px 8px;
+  border: none;
+  margin-bottom: 4px;
+  line-height: 25px;
+  max-width: 160px;
+  background: none;
+}
+
+.header-actions.clear:hover {
+  background: #d8d8d8;
+  transition: 0.3s;
+}
+
+.header-actions button {
+  background: none;
+  border: none;
+}
+
+.button-favorite {
   font-size: 14px;
+}
+
+.button-favorite:hover {
+  background: orange;
+  transition: 0.4s;
 }
 
 hr {
@@ -21,27 +53,6 @@ hr {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   max-width: 260px;
-}
-
-input,
-.favorite-button,
-.clear  {
-  padding: 16px 22px 12px 8px;
-  border: none;
-  border-bottom: 1px solid #bababa;
-  margin-bottom: 4px;
-  border-radius: 4px;
-  background: none;
-}
-
-.favorite-button:hover {
-  background: orange;
-  transition: 0.4s;
-}
-
-.clear:hover {
-  background: #bababa;
-  transition: 0.3s;
 }
 
 @media only screen and (min-width: 400px) {

@@ -2,68 +2,90 @@ import React, { useState, useEffect } from 'react'
 import './ContactList.css'
 import ContactCard from '../ContactCard/ContactCard'
 
+import getDataFromUrl from '../utills/xhr'
+
 const DATA_URL = 'http://demo.sibers.com/users'
 
 const ContactList = () => {
-    const xhr = new XMLHttpRequest()
     const [isLoaded, setIsLoaded] = useState(false)
     const [isRenderFavorite, setIsRenderFavorite] = useState(false)
     const [searchName, setSearchName] = useState(``)
-    const parsedContactsData = JSON.parse(
-        localStorage.getItem('contactsData')
-    )
+    const parsedContactsData = () => {
+        return JSON.parse(localStorage.getItem('contactsData'))
+    }
     const [contactsData, setContactsData] = useState(parsedContactsData || [])
 
-    const getDataFromUrl = () => {
-        xhr.open('GET', DATA_URL)
-        xhr.responseType = 'json'
-        xhr.send()
-        xhr.onload = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    const data = xhr.response.map(contact => {
-                        return {
-                            name: contact.name,
-                            phone: contact.phone,
-                            city: contact.address.city,
-                            company: contact.company.name,
-                            website: contact.website,
-                            avatar: contact.avatar,
-                            favorite: contact.favorite,
-                            id: contact.id
-                        }
-                    })
-                    localStorage.setItem(
-                        'contactsData',
-                        JSON.stringify(data)
-                    )
-                    setContactsData(data)
-                    setIsLoaded(true)
-                return
-            } 
-            alert(`Error ${xhr.status}: ${xhr.statusText}`)
+    const handleSaveChanges = (changedContact) => {
+        const contactsData = JSON.parse(localStorage.getItem('contactsData'))
+        if (contactsData) {
+            const currentPerson = contactsData.find(
+                (contact) => contact.id === changedContact.id
+            )
+            if (currentPerson) {
+                const savedContact = {
+                    avatar: changedContact.avatar.value
+                        ? changedContact.avatar.value
+                        : changedContact.avatar.initialValue,
+                    city: changedContact.city.value
+                        ? changedContact.city.value
+                        : changedContact.city.initialValue,
+                    company: changedContact.company.value
+                        ? changedContact.company.value
+                        : changedContact.company.initialValue,
+                    id: changedContact.id,
+                    favorite: changedContact.favorite.value
+                        ? changedContact.favorite.value
+                        : changedContact.favorite.initialValue,
+                    name: changedContact.name.value
+                        ? changedContact.name.value
+                        : changedContact.name.initialValue,
+                    phone: changedContact.phone.value
+                        ? changedContact.phone.value
+                        : changedContact.phone.initialValue,
+                    website: changedContact.website.value
+                        ? changedContact.website.value
+                        : changedContact.website.initialValue,
+                }
+                contactsData[currentPerson.id] = savedContact
+                localStorage.setItem(
+                    'contactsData',
+                    JSON.stringify(contactsData)
+                )
+                setContactsData(parsedContactsData())
+            }
         }
     }
-        xhr.onerror = function () {
-            console.log('Error. Request failed.')
-        }
+
+    const putDataToLocalStorage = async () => {
+        const xhrResponse = await getDataFromUrl('GET', DATA_URL)
+        localStorage.setItem('contactsData', JSON.stringify(xhrResponse))
+        setContactsData(xhrResponse)
+        setIsLoaded(true)
     }
 
     useEffect(() => {
-        if (!contactsData.length) {
-            getDataFromUrl()
+        if (!contactsData || !contactsData.length) {
+            putDataToLocalStorage()
         }
     }, [])
 
-    
     const handleSearch = (event) => {
         setSearchName(event.target.value)
     }
 
     const renderFavoriteContacts = () => {
         return contactsData
-            .filter((contact) => contact.favorite === true || contact.favorite === "true")
-            .map((contact) => <ContactCard key={contact.id} person={contact} />)
+            .filter(
+                (contact) =>
+                    contact.favorite === true || contact.favorite === 'true'
+            )
+            .map((contact) => (
+                <ContactCard
+                    key={contact.id}
+                    person={contact}
+                    handleSaveChanges={handleSaveChanges}
+                />
+            ))
     }
 
     const renderSearchedContacts = () => {
@@ -72,7 +94,13 @@ const ContactList = () => {
         })
 
         return searchContact.map((contact) => {
-            return <ContactCard key={contact.id} person={contact} />
+            return (
+                <ContactCard
+                    key={contact.id}
+                    person={contact}
+                    handleSaveChanges={handleSaveChanges}
+                />
+            )
         })
     }
 
@@ -88,6 +116,7 @@ const ContactList = () => {
                                     <ContactCard
                                         key={`${key}-${contact.id}`}
                                         person={contact}
+                                        handleSaveChanges={handleSaveChanges}
                                     />
                                 )
                             })}
@@ -121,7 +150,10 @@ const ContactList = () => {
         for (let i = 0; i < contactsData.length; i++) {
             const element = contactsData[i]
 
-            const firstLetter = element.name.toLowerCase().slice(0, 1)
+            const firstLetter = element.name
+                .toString()
+                .toLowerCase()
+                .slice(0, 1)
             groupByLetter[firstLetter].push(element)
         }
     }
@@ -131,41 +163,48 @@ const ContactList = () => {
 
     if (contactsData) {
         contactsData.sort(function (a, b) {
-            let nameA = a.name.toLowerCase()
-            let nameB = b.name.toLowerCase()
+            let nameA = a.name.toString().toLowerCase()
+            let nameB = b.name.toString().toLowerCase()
             if (nameA < nameB) return -1
             if (nameA > nameB) return 1
             return 0
         })
-    }
-    if (contactsData.length !== 0) {
         groupContacts()
     }
 
     return (
         <div>
             <div className="list-header">
-                <input
-                    autoFocus
-                    type="text"
-                    value={searchName}
-                    placeholder="Search contact..."
-                    onChange={handleSearch}
-                ></input>
-                <button className="clear" onClick={() => setSearchName('')}>
-                    Clear search
-                </button>
-                <label className="favorite-button ">
+                <label 
+                        className="header-actions clear">
+                    <input
+                        autoFocus
+                        type="text"
+                        value={searchName}
+                        placeholder="Search contact..."
+                        onChange={handleSearch}
+                    ></input>
+                </label>
+                <label 
+                        className="header-actions clear">
+                    <input
+                        type="button"
+                        value="Clear search"
+                        onClick={() => setSearchName('')}
+                    />
+                </label>
+                <label className="header-actions button-favorite">
                     Favorite
                     <input
                         type="checkbox"
+                        placeholder="Favorite"
                         onClick={() => setIsRenderFavorite(!isRenderFavorite)}
                     />
                 </label>
             </div>
 
             {/* check if the data is loaded */}
-            {contactsData.length ? (
+            {contactsData ? (
                 !searchName ? (
                     !isRenderFavorite ? (
                         renderGroupedContactsByName()
