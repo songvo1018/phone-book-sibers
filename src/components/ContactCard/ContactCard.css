@@ -131,7 +131,8 @@ button:focus-visible {
 
 img {
   border-radius: 50%;
-  margin: 10px;
+  margin: 40px;
+  max-width: 100px;
 }
 
 
@@ -178,7 +179,7 @@ img {
   .modal-footer,
   .modal-content,
   .modal-header {
-    padding: 24px;
+    padding: 12px;
   }
 
   .close {

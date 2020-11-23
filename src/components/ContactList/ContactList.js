@@ -1,42 +1,21 @@
 import React, { useState, useEffect } from 'react'
+
 import './ContactList.css'
-import ContactCard from '../ContactCard/ContactCard'
 
 import getDataFromUrl from '../utills/xhr'
-// import {groupContacts, GroupedContactsByName} from './GroupedByName'
+import GroupedContactsByName from './GroupedByName'
+import FavoriteContacts from './FavoriteContacts'
+import SearchContacts from './SearchContacts'
 
 const DATA_URL = 'http://demo.sibers.com/users'
-
-const GroupedContactsByName = (groupByLetter, handleSaveChanges) => {
-    return Object.keys(groupByLetter).map((letter) => {
-        return (
-            <div className="group" letter={`group-${letter}`}>
-                {groupByLetter[letter].length > 0 ? (
-                    <div>
-                        {letter.toUpperCase()}
-                        {groupByLetter[letter].map((contact) => {
-                            return (
-                                <ContactCard
-                                    key={`${letter}-${contact.id}`}
-                                    contact={contact}
-                                    handleSaveChanges={handleSaveChanges}
-                                />
-                            )
-                        })}
-                        <hr />
-                    </div>
-                ) : null}
-            </div>
-        )
-    })
-  }
 
 const ContactList = () => {
     const [isRenderFavorite, setIsRenderFavorite] = useState(false)
     const [searchName, setSearchName] = useState(``)
 
-    const parsedContactsData = () =>  JSON.parse(localStorage.getItem('contactsData'))
-    
+    const parsedContactsData = () =>
+        JSON.parse(localStorage.getItem('contactsData'))
+
     const [contactsData, setContactsData] = useState(parsedContactsData || [])
 
     const handleSaveChanges = (changedContact) => {
@@ -46,29 +25,20 @@ const ContactList = () => {
                 (contact) => contact.id === changedContact.id
             )
             if (currentContact) {
-                const savedContact = {
-                    avatar: changedContact.avatar.value
-                        ? changedContact.avatar.value
-                        : changedContact.avatar.initialValue,
-                    city: changedContact.city.value
-                        ? changedContact.city.value
-                        : changedContact.city.initialValue,
-                    company: changedContact.company.value
-                        ? changedContact.company.value
-                        : changedContact.company.initialValue,
-                    id: changedContact.id,
-                    favorite: changedContact.favorite.value
-                        ? changedContact.favorite.value
-                        : changedContact.favorite.initialValue,
-                    name: changedContact.name.value
-                        ? changedContact.name.value
-                        : changedContact.name.initialValue,
-                    phone: changedContact.phone.value
-                        ? changedContact.phone.value
-                        : changedContact.phone.initialValue,
-                    website: changedContact.website.value
-                        ? changedContact.website.value
-                        : changedContact.website.initialValue,
+                const field = Object.keys(currentContact)
+                const savedContact = {}
+                for (let i = 0; i < field.length; i++) {
+                    const current = field[i]
+
+                    // check if field is id, because it have not fields 'value, initialValue'
+                    if (changedContact[current] === currentContact.id) {
+                        savedContact[current] = currentContact.id
+                    } else if (changedContact[current].value) {
+                        savedContact[current] = changedContact[current].value
+                    } else {
+                        savedContact[current] =
+                            changedContact[current].initialValue
+                    }
                 }
                 contactsData[currentContact.id] = savedContact
                 localStorage.setItem(
@@ -92,77 +62,40 @@ const ContactList = () => {
         }
     }, [])
 
-
-
     const handleSearch = (event) => {
         setSearchName(event.target.value)
     }
 
-    // TODO : decompose renders
-    const renderFavoriteContacts = () => {
-        return contactsData
-            .filter(
-                (contact) =>
-                    contact.favorite === true || contact.favorite === 'true'
-            )
-            .map((contact) => (
-                <ContactCard
-                    key={contact.id}
-                    contact={contact}
-                    handleSaveChanges={handleSaveChanges}
-                />
-            ))
-    }
+    // creating object  with keys (from letters array)  for grouping contacts by first letter
+    //
 
-    // TODO : decompose renders
-    const renderSearchedContacts = () => {
-        const searchContact = contactsData.filter((el) => {
-            return el.name.toLowerCase().indexOf(searchName.toLowerCase()) > -1
-        })
-
-        return searchContact.map((contact) => {
-            return (
-                <ContactCard
-                    key={contact.id}
-                    contact={contact}
-                    handleSaveChanges={handleSaveChanges}
-                />
-            )
-        })
-    }
-
-    
-      
-      // creating object  with keys (from letters array)  for grouping contacts by first letter
-      //
-      const alphabet = []
-      function genCharArray(charA, charZ) {
+    const alphabet = []
+    function genCharArray(charA, charZ) {
         let i = charA.charCodeAt(0)
         let j = charZ.charCodeAt(0)
         for (; i <= j; ++i) {
             alphabet.push([String.fromCharCode(i), []])
         }
         return alphabet
-      }
-      const entries = new Map(genCharArray('a', 'z'))
-      
-      const groupByLetter = Object.fromEntries(entries)
-      
-      // filling the array with contacts by their first letter of the name
-      //
-      
-      const groupContacts = () => {
+    }
+    const entries = new Map(genCharArray('a', 'z'))
+
+    const groupByLetter = Object.fromEntries(entries)
+
+    // filling the array with contacts by their first letter of the name
+    //
+
+    const groupContacts = () => {
         for (let i = 0; i < contactsData.length; i++) {
             const element = contactsData[i]
-      
+
             const firstLetter = element.name
                 .toString()
                 .toLowerCase()
                 .slice(0, 1)
             groupByLetter[firstLetter].push(element)
         }
-      }
-    
+    }
 
     // check if the data is loaded
     //
@@ -181,8 +114,7 @@ const ContactList = () => {
     return (
         <div>
             <div className="list-header">
-                <label 
-                        className="header-actions clear">
+                <label className="header-actions clear">
                     <input
                         autoFocus
                         type="text"
@@ -191,8 +123,7 @@ const ContactList = () => {
                         onChange={handleSearch}
                     ></input>
                 </label>
-                <label 
-                        className="header-actions clear">
+                <label className="header-actions clear">
                     <input
                         type="button"
                         value="Clear search"
@@ -208,21 +139,24 @@ const ContactList = () => {
                     />
                 </label>
             </div>
-
-            {/* check if the data is loaded */}
-            {contactsData ? (
-                !searchName ? (
-                    !isRenderFavorite ? (
-                        GroupedContactsByName(groupByLetter, handleSaveChanges)
-                        // <GroupedContactsByName handleSaveChanges={handleSaveChanges}/>
-                    ) : (
-                        renderFavoriteContacts()
-                    )
+            {!searchName ? (
+                !isRenderFavorite ? (
+                    <GroupedContactsByName
+                        groupByLetter={groupByLetter}
+                        handleSaveChanges={handleSaveChanges}
+                    />
                 ) : (
-                    renderSearchedContacts()
+                    <FavoriteContacts
+                        contactsData={contactsData}
+                        handleSaveChanges={handleSaveChanges}
+                    />
                 )
             ) : (
-                <div>Load...</div>
+                <SearchContacts
+                    searchName={searchName}
+                    contactsData={contactsData}
+                    handleSaveChanges={handleSaveChanges}
+                />
             )}
         </div>
     )

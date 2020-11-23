@@ -4,7 +4,7 @@ import './ContactCard.css'
 import InputFields from './InputFields'
 import FavoriteButtons from './FavoriteButtons'
 import ContactInfo from './ContactInfo'
-
+import Image from '../utills/Image/Image'
 const INPUTS = ['name', 'phone', 'city', 'company', 'website', 'avatar']
 
 const SimpleButton = ({ className, handler, children }) => {
@@ -112,8 +112,10 @@ const ContactCard = ({ contact, handleSaveChanges }) => {
                             <ContactInfo contact={contact} />
                         ) : (
                             <div className="modal-content">
-                                {/* https://vincenttaverna.com/posts/react-image-hook/ */}
-                                <img alt={contact.name} src={contact.avatar} />
+                                <Image
+                                    src={contact.avatar}
+                                    alt={contact.name}
+                                />
                                 <InputFields
                                     INPUTS={INPUTS}
                                     formData={formData}
