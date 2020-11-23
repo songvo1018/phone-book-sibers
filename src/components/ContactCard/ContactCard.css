@@ -1,9 +1,9 @@
-.item {
+.contact {
   max-width: 320px;
   margin: 0 auto;
 }
 
-.item :hover {
+.contact :hover {
   cursor: pointer;
   background-color: #bababa;
   border-radius: 4px;
@@ -156,7 +156,7 @@ img {
     font-size: 16px;
   }
 
-  .item {
+  .contact {
     max-width: 400px;
   }
 

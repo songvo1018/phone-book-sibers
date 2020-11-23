@@ -1,47 +1,54 @@
 import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import './ContactCard.css'
+import InputFields from './InputFields'
+import FavoriteButtons from './FavoriteButtons'
+import ContactInfo from './ContactInfo'
 
 const INPUTS = ['name', 'phone', 'city', 'company', 'website', 'avatar']
 
-const capitalize = (s) => {
-    if (typeof s !== 'string') return ''
-    return s.charAt(0).toUpperCase() + s.slice(1)
+const SimpleButton = ({ className, handler, children }) => {
+    return (
+        <button className={className} onClick={handler}>
+            {children}
+        </button>
+    )
 }
 
-const ContactCard = ({ person, handleSaveChanges }) => {
+const initialFormData = (INPUTS, contact, setFormData) => {
+    const editingContact = {
+        id: contact.id,
+        favorite: {
+            value: '',
+            initialValue: contact.favorite,
+            error: null,
+        },
+    }
+    INPUTS.forEach((key) => {
+        editingContact[key] = {
+            value: '',
+            initialValue: contact[key],
+            error: null,
+        }
+    })
+
+    setFormData(editingContact)
+}
+
+const ContactCard = ({ contact, handleSaveChanges }) => {
     const [formData, setFormData] = useState({})
     const [showModal, setShowModal] = useState(false)
     const [isFieldChanged, setIsFieldChanged] = useState(false)
-    const [isEditing, setIsEditing] = useState(false)
-    const [isEdited, setIsEdited] = useState(false)
-    // call this in another way
-
-    // example of form data
-    const initialFormData = () => {
-        const result = {
-            id: person.id,
-            favorite: { value: '', initialValue: person.favorite, error: null },
-        }
-        INPUTS.forEach((key) => {
-            result[key] = {
-                value: '',
-                initialValue: person[key],
-                error: null,
-            }
-        })
-
-        setFormData(result)
-    }
+    const [isProcessOfEditing, setIsProcessOfEditing] = useState(false)
+    const [isShowMessageEdited, setShowMessageEdited] = useState(false)
 
     useEffect(() => {
-        
-        if (isEdited) {
+        if (isShowMessageEdited) {
             setTimeout(() => {
-                setIsEdited(false)
+                setShowMessageEdited(false)
             }, 900)
         }
-    }, [isEdited])
+    }, [isShowMessageEdited])
 
     const handleOpenModal = () => {
         setShowModal(true)
@@ -52,102 +59,42 @@ const ContactCard = ({ person, handleSaveChanges }) => {
     }
 
     const handleEditContact = () => {
-        setIsEditing(true)
-        if (!isEdited) {
-            initialFormData()
-            setIsEdited(false)
+        setIsProcessOfEditing(true)
+        if (!isShowMessageEdited) {
+            initialFormData(INPUTS, contact, setFormData)
+            setShowMessageEdited(false)
         }
     }
-
-    // move this function to parent
-
-    // // here we send 'post' request on the server
 
     const handleChangeContactData = (event) => {
         event.preventDefault()
         const name = event.target.name
         const value = event.target.value
-        const obj = { ...formData }
+        const currentContact = { ...formData }
         const keys = Object.keys(formData)
 
         for (let i = 0; i < keys.length; i++) {
             const field = keys[i]
             if (field === name) {
-                obj[field].value = value
+                currentContact[field].value = value
             }
         }
-
-        // pay attention to naming of variables of person/contact. And call function from parent to change contacts data
-        setFormData(obj)
-    }
-
-    const renderFavoriteButtons = () => {
-
-// TODO: should i take value from props or formdate?
-
-        const initialCompare =
-            formData.favorite.initialValue === true ||
-            formData.favorite.initialValue === 'true'
-        return (
-            <button
-                className={`button${initialCompare ? '' : ' favor'}${isFieldChanged? ' changed': ''}`}
-                name="favorite"
-                value={
-                    person.favorite === true || person.favorite === 'true'
-                        ? false
-                        : true
-                }
-                onClick={(event) => {
-                    setIsFieldChanged(true)
-                    handleChangeContactData(event)
-                }}
-            >
-                {initialCompare ? 'unfavorite' : 'favorite'}
-            </button>
-        )
-    }
-    const renderInputFields = () => {
-        //
-        const inputFields = []
-
-        INPUTS.map((input) => {
-            return inputFields.push(
-                <input
-                    // first letter to upper case
-                    placeholder={capitalize(input)}
-                    key={input}
-                    name={input}
-                    type="text"
-                    value={
-                        formData[input].value !== ''
-                            ? formData[input].value
-                            : formData[input].initialValue
-                    }
-                    onChange={(event) => {
-                        handleChangeContactData(event)
-                    }}
-                    // change naming of class name
-                    className={`input`}
-                />
-            )
-        })
-        return <div>{inputFields}</div>
+        setFormData(currentContact)
     }
 
     return (
-        <div className="item">
+        <div className="contact">
             <div
-                // replace isFavoriteStyle to favorite field value from person prop
                 className={`card${
-                    person.favorite === true || person.favorite === 'true'
+                    contact.favorite === true || contact.favorite === 'true'
                         ? ' favorite'
                         : ''
                 }`}
-                key={person.id}
+                key={contact.id}
                 onClick={handleOpenModal}
             >
-                <div>{person.name}</div>
-                <div>{person.phone}</div>
+                <div>{contact.name}</div>
+                <div>{contact.phone}</div>
             </div>
             <Modal
                 isOpen={showModal}
@@ -161,60 +108,60 @@ const ContactCard = ({ person, handleSaveChanges }) => {
             >
                 <div className="modal-window">
                     <div className="modal-header">
-                        {!isEditing ? (
-                            <div className="modal-content">
-                                <img alt={person.name} src={person.avatar} />
-                                <div className="modal-text">{person.name}</div>
-                                <div className="modal-text">{person.phone}</div>
-                                <div className="modal-text">
-                                    {person.company}
-                                </div>
-                                <div className="modal-text">{person.city}</div>
-                                <a
-                                    href={`https://${person.website}`}
-                                    className="modal-text"
-                                >
-                                    {person.website}
-                                </a>
-                            </div>
+                        {!isProcessOfEditing ? (
+                            <ContactInfo contact={contact} />
                         ) : (
                             <div className="modal-content">
                                 {/* https://vincenttaverna.com/posts/react-image-hook/ */}
-                                <img alt={person.name} src={person.avatar} />
-                                {renderInputFields()}
-                                {renderFavoriteButtons()}
+                                <img alt={contact.name} src={contact.avatar} />
+                                <InputFields
+                                    INPUTS={INPUTS}
+                                    formData={formData}
+                                    handleChangeContactData={
+                                        handleChangeContactData
+                                    }
+                                />
+                                <FavoriteButtons
+                                    formData={formData}
+                                    contact={contact}
+                                    setIsFieldChanged={setIsFieldChanged}
+                                    handleChangeContactData={
+                                        handleChangeContactData
+                                    }
+                                    isFieldChanged={isFieldChanged}
+                                />
                             </div>
                         )}
                         <div>
-                            <button
-                                className="close"
-                                onClick={handleCloseModal}
+                            <SimpleButton
+                                handler={handleCloseModal}
+                                className={'close'}
                             >
                                 <i className="fas fa-times"></i>
-                            </button>
+                            </SimpleButton>
                         </div>
                     </div>
                     <div className="modal-footer">
-                        {!isEditing ? (
-                            <button
-                                className="button"
-                                onClick={handleEditContact}
+                        {!isProcessOfEditing ? (
+                            <SimpleButton
+                                handler={handleEditContact}
+                                className={'button'}
                             >
                                 Edit contact
-                            </button>
+                            </SimpleButton>
                         ) : (
-                            <button
-                                className="button"
-                                onClick={() => {
+                            <SimpleButton
+                                handler={() => {
                                     handleSaveChanges(formData)
-                                    setIsEdited(true)
-                                    setIsEditing(false)
+                                    setShowMessageEdited(true)
+                                    setIsProcessOfEditing(false)
                                 }}
+                                className={'button'}
                             >
                                 Save changes
-                            </button>
+                            </SimpleButton>
                         )}
-                        {isEdited && (
+                        {isShowMessageEdited && (
                             <span className="edited-message">
                                 Changes saved
                             </span>
