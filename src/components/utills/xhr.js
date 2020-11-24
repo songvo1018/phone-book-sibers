@@ -3,7 +3,7 @@ const getDataFromUrl = (method, url) => {
         const xhr = new XMLHttpRequest()
 
         xhr.open(method, url)
-        xhr.responseType = 'json'
+        xhr.responseType = "json"
         xhr.send()
         xhr.onload = function () {
             if (xhr.readyState === 4) {
@@ -27,7 +27,7 @@ const getDataFromUrl = (method, url) => {
             }
         }
         xhr.onerror = function () {
-            console.log('Error. Request failed.')
+            console.log("Error. Request failed.")
             reject({
                 status: this.status,
                 statusText: xhr.statusText,

@@ -1,41 +1,43 @@
-html, body {
+html,
+body {
     max-width: 100%;
     overflow-x: hidden;
 }
 .App {
-  text-align: center;
-  min-width: 320px;
-  margin: 0 auto;
-  padding-top: 40px;
-  font-family: 'Roboto', sans-serif;
+    text-align: center;
+    min-width: 320px;
+    margin: 0 auto;
+    padding-top: 40px;
+    font-family: 'Roboto', sans-serif;
 }
 .App-header {
-  font-size: 14px;
+    font-size: 14px;
 }
-button, input{
-  font-family: 'Roboto', sans-serif;
-  border: none;
-  background: none;
-  font-size: 14px;
+button,
+input {
+    font-family: 'Roboto', sans-serif;
+    border: none;
+    background: none;
+    font-size: 14px;
 }
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 400px) {
-  .App {
-    text-align: center;
-    min-width: 390px;
-  }
-  .App-header {
-    font-size: 18px;
-  }
+    .App {
+        text-align: center;
+        min-width: 390px;
+    }
+    .App-header {
+        font-size: 18px;
+    }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-  .App {
-    text-align: center;
-    min-width: 900px;
-  }
-  .App-header {
-    font-size: 24px;
-  }
+    .App {
+        text-align: center;
+        min-width: 900px;
+    }
+    .App-header {
+        font-size: 24px;
+    }
 }

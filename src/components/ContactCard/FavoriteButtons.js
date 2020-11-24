@@ -1,33 +1,37 @@
 const FavoriteButtons = ({
     formData,
     contact,
-    setIsFieldChanged,
-    handleChangeContactData,
-    isFieldChanged,
+    handleChangeContactData
 }) => {
     // TODO: should i take value from props or formdate?
 
     const initialCompare =
         formData.favorite.initialValue === true ||
-        formData.favorite.initialValue === 'true'
+        formData.favorite.initialValue === "true"
     return (
-        <button
-            className={`button${initialCompare ? '' : ' favor'}${
-                isFieldChanged ? ' changed' : ''
-            }`}
-            name="favorite"
-            value={
-                contact.favorite === true || contact.favorite === 'true'
-                    ? false
-                    : true
-            }
-            onClick={(event) => {
-                setIsFieldChanged(true)
-                handleChangeContactData(event)
-            }}
-        >
-            {initialCompare ? 'unfavorite' : 'favorite'}
-        </button>
+        <label>
+            <span
+                className={
+                    formData.favorite.value !== "" ? "label-show" : "label-hide"
+                }
+            >
+                Changed
+            </span>
+            <button
+                className="button favor"
+                name="favorite"
+                value={
+                    contact.favorite === true || contact.favorite === "true"
+                        ? false
+                        : true
+                }
+                onClick={(event) => {
+                    handleChangeContactData(event)
+                }}
+            >
+                {initialCompare ? "unfavorite" : "favorite"}
+            </button>
+        </label>
     )
 }
 

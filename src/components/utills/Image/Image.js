@@ -1,14 +1,14 @@
-import React from 'react'
-import useImage, { Status } from './useImage.js'
+import React from "react"
+import useImage, { Status } from "./useImage.js"
 
-import avatar from './avatar.svg'
-import './spinner.css'
+import avatar from "./avatar.svg"
+import "./spinner.css"
 
 export default function Image({ src, alt }) {
     const [status, image] = useImage(src)
 
     if (status === Status.LOADING) {
-        return <div className="spinner" />
+        return <div class="loader">Loading...</div>
     }
 
     let source

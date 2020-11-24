@@ -1,13 +1,13 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from "react"
 
-import loadImage from './loadImage.js'
+import loadImage from "./loadImage.js"
 
 const cache = new Map()
 
 export const Status = {
-    LOADING: 'loading',
-    LOADED: 'loaded',
-    FAILED: 'failed',
+    LOADING: "loading",
+    LOADED: "loaded",
+    FAILED: "failed",
 }
 
 export default function useImage(src) {

@@ -1,5 +1,5 @@
 const capitalize = (s) => {
-    if (typeof s !== 'string') return ''
+    if (typeof s !== "string") return ""
     return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
@@ -8,13 +8,15 @@ const renderInputFields = ({ INPUTS, formData, handleChangeContactData }) => {
 
     INPUTS.map((input) => {
         return inputFields.push(
-            <input
+            <label>
+                <span className={formData[input].value !== "" ?"label-show" : "label-hide"}>Changed</span>                
+                <input
                 placeholder={capitalize(input)}
                 key={input}
                 name={input}
                 type="text"
                 value={
-                    formData[input].value !== ''
+                    formData[input].value !== ""
                         ? formData[input].value
                         : formData[input].initialValue
                 }
@@ -23,6 +25,7 @@ const renderInputFields = ({ INPUTS, formData, handleChangeContactData }) => {
                 }}
                 className={`input`}
             />
+            </label>
         )
     })
     return <div>{inputFields}</div>

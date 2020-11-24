@@ -1,4 +1,4 @@
-import ContactCard from '../ContactCard/ContactCard'
+import ContactCard from "../ContactCard/ContactCard"
 
 const GroupedContactsByName = ({ groupByLetter, handleSaveChanges }) => {
     return Object.keys(groupByLetter).map((letter) => {

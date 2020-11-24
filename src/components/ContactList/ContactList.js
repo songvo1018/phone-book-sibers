@@ -1,48 +1,70 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react"
 
-import './ContactList.css'
+import "./ContactList.css"
+import getDataFromUrl from "../utills/xhr"
+import GroupedContactsByName from "./GroupedByName"
+import FavoriteContacts from "./FavoriteContacts"
+import SearchContacts from "./SearchContacts"
 
-import getDataFromUrl from '../utills/xhr'
-import GroupedContactsByName from './GroupedByName'
-import FavoriteContacts from './FavoriteContacts'
-import SearchContacts from './SearchContacts'
+const DATA_URL = "http://demo.sibers.com/users"
 
-const DATA_URL = 'http://demo.sibers.com/users'
+const putDataToLocalStorage = async (DATA_URL, setContactsData) => {
+    const xhrResponse = await getDataFromUrl("GET", DATA_URL)
+    localStorage.setItem("contactsData", JSON.stringify(xhrResponse))
+    setContactsData(xhrResponse)
+}
+
+const groupedLetters = () => {
+    const alphabet = []
+    function genCharArray(charA, charZ) {
+        let i = charA.charCodeAt(0)
+        let j = charZ.charCodeAt(0)
+        for (; i <= j; ++i) {
+            alphabet.push([String.fromCharCode(i), []])
+        }
+        return alphabet
+    }
+    const entries = new Map(genCharArray("a", "z"))
+
+    return Object.fromEntries(entries)
+}
 
 const ContactList = () => {
     const [isRenderFavorite, setIsRenderFavorite] = useState(false)
-    const [searchName, setSearchName] = useState(``)
+    const [searchName, setSearchName] = useState("")
 
     const parsedContactsData = () =>
-        JSON.parse(localStorage.getItem('contactsData'))
+        JSON.parse(localStorage.getItem("contactsData"))
 
     const [contactsData, setContactsData] = useState(parsedContactsData || [])
 
+    // handler gets contact, finding him in localstorage, and update changes
+
     const handleSaveChanges = (changedContact) => {
-        const contactsData = JSON.parse(localStorage.getItem('contactsData'))
+        const contactsData = JSON.parse(localStorage.getItem("contactsData"))
         if (contactsData) {
             const currentContact = contactsData.find(
                 (contact) => contact.id === changedContact.id
             )
             if (currentContact) {
                 const field = Object.keys(currentContact)
-                const savedContact = {}
+                const updatedContact = {}
                 for (let i = 0; i < field.length; i++) {
                     const current = field[i]
 
-                    // check if field is id, because it have not fields 'value, initialValue'
+                    // checking if it field is id, because id have not fields "value, initialValue"
                     if (changedContact[current] === currentContact.id) {
-                        savedContact[current] = currentContact.id
+                        updatedContact[current] = currentContact.id
                     } else if (changedContact[current].value) {
-                        savedContact[current] = changedContact[current].value
+                        updatedContact[current] = changedContact[current].value
                     } else {
-                        savedContact[current] =
+                        updatedContact[current] =
                             changedContact[current].initialValue
                     }
                 }
-                contactsData[currentContact.id] = savedContact
+                contactsData[currentContact.id] = updatedContact
                 localStorage.setItem(
-                    'contactsData',
+                    "contactsData",
                     JSON.stringify(contactsData)
                 )
                 setContactsData(parsedContactsData())
@@ -50,15 +72,12 @@ const ContactList = () => {
         }
     }
 
-    const putDataToLocalStorage = async () => {
-        const xhrResponse = await getDataFromUrl('GET', DATA_URL)
-        localStorage.setItem('contactsData', JSON.stringify(xhrResponse))
-        setContactsData(xhrResponse)
-    }
+    // WARNING: 
+    //  Line 82:8:  React Hook useEffect has a missing dependency: 'contactsData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (!contactsData || !contactsData.length) {
-            putDataToLocalStorage()
+            putDataToLocalStorage(DATA_URL, setContactsData)
         }
     }, [])
 
@@ -69,18 +88,7 @@ const ContactList = () => {
     // creating object  with keys (from letters array)  for grouping contacts by first letter
     //
 
-    const alphabet = []
-    function genCharArray(charA, charZ) {
-        let i = charA.charCodeAt(0)
-        let j = charZ.charCodeAt(0)
-        for (; i <= j; ++i) {
-            alphabet.push([String.fromCharCode(i), []])
-        }
-        return alphabet
-    }
-    const entries = new Map(genCharArray('a', 'z'))
-
-    const groupByLetter = Object.fromEntries(entries)
+    const groupByLetter = groupedLetters()
 
     // filling the array with contacts by their first letter of the name
     //
@@ -127,7 +135,7 @@ const ContactList = () => {
                     <input
                         type="button"
                         value="Clear search"
-                        onClick={() => setSearchName('')}
+                        onClick={() => setSearchName("")}
                     />
                 </label>
                 <label className="header-actions button-favorite">

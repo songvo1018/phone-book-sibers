@@ -1,10 +1,10 @@
-import ContactCard from '../ContactCard/ContactCard'
+import ContactCard from "../ContactCard/ContactCard"
 
 const FavoriteContacts = ({ contactsData, handleSaveChanges }) => {
     return contactsData
         .filter(
             (contact) =>
-                contact.favorite === true || contact.favorite === 'true'
+                contact.favorite === true || contact.favorite === "true"
         )
         .map((contact) => (
             <ContactCard
