@@ -6,7 +6,7 @@ const SearchedContacts = ({ searchName, contactsData, handleSaveChanges } : {sea
     const searchContact = contactsData.filter((el: Contact) => {
         return el.name.toLowerCase().indexOf(searchName.toLowerCase()) > -1
     })
-
+// test
     return searchContact.map((contact: Contact) => {
         return (
             <ContactCard
