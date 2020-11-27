@@ -8,7 +8,7 @@ export default function Image({ src, alt }) {
     const [status, image] = useImage(src)
 
     if (status === Status.LOADING) {
-        return <div class="loader">Loading...</div>
+        return <div className="loader">Loading...</div>
     }
 
     let source

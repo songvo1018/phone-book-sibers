@@ -8,23 +8,30 @@ const renderInputFields = ({ INPUTS, formData, handleChangeContactData }) => {
 
     INPUTS.map((input) => {
         return inputFields.push(
-            <label>
-                <span className={formData[input].value !== "" ?"label-show" : "label-hide"}>Changed</span>                
+            <label key={input}>
+                <span
+                    className={
+                        formData[input].value !== ""
+                            ? "label-show"
+                            : "label-hide"
+                    }
+                >
+                    Changed
+                </span>
                 <input
-                placeholder={capitalize(input)}
-                key={input}
-                name={input}
-                type="text"
-                value={
-                    formData[input].value !== ""
-                        ? formData[input].value
-                        : formData[input].initialValue
-                }
-                onChange={(event) => {
-                    handleChangeContactData(event)
-                }}
-                className={`input`}
-            />
+                    placeholder={capitalize(input)}
+                    name={input}
+                    type="text"
+                    value={
+                        formData[input].value !== ""
+                            ? formData[input].value
+                            : formData[input].initialValue
+                    }
+                    onChange={(event) => {
+                        handleChangeContactData(event)
+                    }}
+                    className={`input`}
+                />
             </label>
         )
     })
