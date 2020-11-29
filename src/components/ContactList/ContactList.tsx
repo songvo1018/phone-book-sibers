@@ -6,7 +6,7 @@ import GroupedContactsByName from "./GroupedByName"
 import FavoriteContacts from "./FavoriteContacts"
 import SearchContacts from "./SearchContacts"
 
-import {Contact} from '../types'
+import {Contact, GroupedByFirstLetter} from '../types'
 
 const DATA_URL : string = "http://demo.sibers.com/users"
 
@@ -17,6 +17,7 @@ const putDataToLocalStorage = async (DATA_URL: string, setContactsData: any) => 
 }
 
 const groupedLetters = () => {
+    // how to create type for 'alphabet'
     const alphabet : any = []
     function genCharArray(charA: string, charZ: string) {
         let i = charA.charCodeAt(0)
@@ -42,18 +43,21 @@ const ContactList = () => {
 
     // handler gets contact, finding him in localstorage, and update changes
 
+    // how to give 'changedContact' correct type, and why Contact not match
+    // const handleSaveChanges = (changedContact: Contact) => { 
     const handleSaveChanges = (changedContact: any) => {
         const contactsData = JSON.parse(localStorage.getItem("contactsData") || `{}`)
         if (contactsData) {
             const currentContact: Contact = contactsData.find(
-                (contact: { id: any }) => contact.id === changedContact.id
+                (contact: Contact) => contact.id === changedContact.id
             )
             if (currentContact) {
                 const field = Object.keys(currentContact)
                 const updatedContact: any = {}
                 for (let i = 0; i < field.length; i++) {
                     const current = field[i]
-
+                    console.log(changedContact[current], currentContact.id);
+                    
                     // checking if it field is id, because id have not fields "value, initialValue"
                     if (changedContact[current] === currentContact.id) {
                         updatedContact[current] = currentContact.id
@@ -83,14 +87,14 @@ const ContactList = () => {
         }
     }, [])
 
-    const handleSearch = (event : any) => {
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchName(event.target.value)
     }
 
     // creating object  with keys (from letters array)  for grouping contacts by first letter
     //
 
-    const groupByLetter = groupedLetters()
+    const groupByLetter: GroupedByFirstLetter = groupedLetters()
 
     // filling the array with contacts by their first letter of the name
     //
@@ -111,7 +115,7 @@ const ContactList = () => {
     //
 
     if (contactsData) {
-        contactsData.sort(function (a: { name: { toString: () => string } }, b: { name: { toString: () => string } }) {
+        contactsData.sort(function (a: any, b: any) {
             let nameA = a.name.toString().toLowerCase()
             let nameB = b.name.toString().toLowerCase()
             if (nameA < nameB) return -1

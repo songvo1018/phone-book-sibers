@@ -14,7 +14,8 @@ import {ContactCardType} from '../types'
 
 const INPUTS: string[] = ["name", "phone", "city", "company", "website", "avatar"]
 
-const handleChangeContactData = (event: any, formData: any, setFormData: any) => {
+// set correct type 'formData' argument
+const handleChangeContactData = (event: React.ChangeEvent<HTMLInputElement>, formData: any, setFormData: any) => {
     event.preventDefault()
     const name = event.target.name
     const value = event.target.value

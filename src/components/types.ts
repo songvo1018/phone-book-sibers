@@ -15,3 +15,8 @@ export interface ContactCardType {
   contact: Contact
   handleSaveChanges: any
 }
+
+export interface GroupedByFirstLetter {
+  [propName: string] : Contact[]
+}
+
