@@ -1,4 +1,6 @@
-
+import { Contact } from "../types"
+// how to set 'contact' argument correct type, and why not match 'Contact'
+// const initialFormData = (INPUTS: string[], contact: Contact, setFormData: any) => {
 const initialFormData = (INPUTS: string[], contact: any, setFormData: any) => {
     const editingContact: any = {
         id: contact.id,

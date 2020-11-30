@@ -1,8 +1,8 @@
 import ContactCard from "../ContactCard/ContactCard"
-import { Contact } from "../../components/types"
+import { Contact, GroupedByFirstLetter } from "../../components/types"
 import React from "react"
 type Props = {
-    groupByLetter: Contact[]
+    groupByLetter: GroupedByFirstLetter
     handleSaveChanges: any
 }
 const GroupedContactsByName = ({ groupByLetter, handleSaveChanges }: Props) => {
