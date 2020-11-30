@@ -11,7 +11,8 @@ import {Contact} from '../types'
 const DATA_URL : string = "http://demo.sibers.com/users"
 
 const putDataToLocalStorage = async (DATA_URL: string, setContactsData: any) => {
-    const xhrResponse = await getDataFromUrl("GET", DATA_URL)
+    const xhrResponse: Contact[] = await getDataFromUrl("GET", DATA_URL)
+    
     localStorage.setItem("contactsData", JSON.stringify(xhrResponse))
     setContactsData(xhrResponse)
 }
@@ -32,13 +33,13 @@ const groupedLetters = () => {
 }
 
 const ContactList = () => {
-    const [isRenderFavorite, setIsRenderFavorite] = useState(false)
-    const [searchName, setSearchName] = useState("")
+    const [isRenderFavorite, setIsRenderFavorite] = useState<boolean>(false)
+    const [searchName, setSearchName] = useState<string>("")
 
-    const parsedContactsData = ()  =>
+    const parsedContactsData = () : Contact[] =>
         JSON.parse(localStorage.getItem("contactsData") || `{}`)
 
-    const [contactsData, setContactsData] = useState(parsedContactsData || [])
+    const [contactsData, setContactsData] = useState<Contact[] | []>(parsedContactsData || [])
 
     // handler gets contact, finding him in localstorage, and update changes
 
@@ -110,7 +111,7 @@ const ContactList = () => {
     // check if the data is loaded
     //
 
-    if (contactsData) {
+    if (contactsData.length) {
         contactsData.sort(function (a: { name: { toString: () => string } }, b: { name: { toString: () => string } }) {
             let nameA = a.name.toString().toLowerCase()
             let nameB = b.name.toString().toLowerCase()
