@@ -10,7 +10,6 @@ const GroupedContactsByName = ({ groupByLetter, handleSaveChanges }: Props) => {
         <div>
             {Object.keys(groupByLetter).map((letter: any) => {
                 return (
-
                     < div className="group" key={letter} >
                         {
                             groupByLetter[letter].length > 0 ? (

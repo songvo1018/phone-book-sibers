@@ -22,3 +22,19 @@ export interface GroupedByFirstLetter {
   [propName: string] : Contact[]
 }
 
+export interface SearchedContactsType {
+  searchName: string,
+  contactsData: Contact[],
+  handleSaveChanges: any
+}
+export interface InputFieldsTypes {
+  INPUTS: string[],
+  formData: any,
+  handleChangeContactData: any
+}
+
+export interface FavoriteButtonsType {
+  contact: Contact, 
+  formData: any 
+  handleChangeContactData: any, 
+}

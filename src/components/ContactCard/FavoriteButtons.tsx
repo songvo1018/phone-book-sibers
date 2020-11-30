@@ -1,13 +1,7 @@
 import React from "react"
-import { Contact } from "../types"
+import { Contact, FavoriteButtonsType } from "../types"
 
-const FavoriteButtons = ({
-    formData,
-    contact,
-    handleChangeContactData
-}: {contact: Contact, handleChangeContactData: any, formData: any}) => {
-    // TODO: should i take value from props or formdate?
-
+const FavoriteButtons = ({ formData, contact, handleChangeContactData }: FavoriteButtonsType) => {
     const initialCompare =
         formData.favorite.initialValue === true ||
         formData.favorite.initialValue === "true"

@@ -18,7 +18,7 @@ const putDataToLocalStorage = async (DATA_URL: string, setContactsData: any) => 
 }
 
 const groupedLetters = () => {
-    // how to create type for 'alphabet'
+    // how to set type for 'alphabet'
     const alphabet : any = []
     function genCharArray(charA: string, charZ: string) {
         let i = charA.charCodeAt(0)
@@ -45,7 +45,6 @@ const ContactList = () => {
     // handler gets contact, finding him in localstorage, and update changes
 
     // how to give 'changedContact' correct type, and why Contact not match
-    // const handleSaveChanges = (changedContact: Contact) => { 
     const handleSaveChanges = (changedContact: any) => {
         const contactsData = JSON.parse(localStorage.getItem("contactsData") || `{}`)
         if (contactsData) {
@@ -78,9 +77,6 @@ const ContactList = () => {
             }
         }
     }
-
-    // WARNING: 
-    //  Line 82:8:  React Hook useEffect has a missing dependency: 'contactsData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (!contactsData || !contactsData.length) {

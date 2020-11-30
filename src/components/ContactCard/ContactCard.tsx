@@ -148,7 +148,6 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) => {
                                     handleSaveChanges(formData)
                                     setShowMessageEdited(true)
                                     setIsProcessOfEditing(false)
-                                    // can i destroy formdata?
                                 }}
                                 className={"button"}
                             >
