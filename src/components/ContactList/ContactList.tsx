@@ -56,8 +56,7 @@ const ContactList = () => {
                 const updatedContact: any = {}
                 for (let i = 0; i < field.length; i++) {
                     const current = field[i]
-                    console.log(changedContact[current], currentContact.id);
-                    
+                                        
                     // checking if it field is id, because id have not fields "value, initialValue"
                     if (changedContact[current] === currentContact.id) {
                         updatedContact[current] = currentContact.id
