@@ -1,6 +1,6 @@
-import React from 'react'
+
 import {Contact} from '../types'
-const ContactInfo = ({ contact } : {contact: Contact} ) => {
+const ContactInfo = ({ contact } : {contact: Contact} ): JSX.Element => {
     return (
         <div className="modal-content">
             <div className="modal-text">{contact.name}</div>

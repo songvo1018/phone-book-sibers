@@ -1,16 +1,13 @@
-import React from "react"
 import { ReactElement } from "react"
-import {InputFieldsTypes} from '../types'
+import { InputFieldsTypes } from '../types'
 
 const capitalize = (s: string) => {
     if (typeof s !== "string") return ""
     return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-// set correct type 'formObject' argument
-const renderInputFields = ({ INPUTS, formObject, handleChangeContactData }: InputFieldsTypes) => {
+const renderInputFields = ({ INPUTS, formObject, handleChangeContactData }: InputFieldsTypes): JSX.Element=> {
     const inputFields: ReactElement[] = []
-
     INPUTS.map((input) => {
         return inputFields.push(
             <label key={input}>
@@ -26,7 +23,7 @@ const renderInputFields = ({ INPUTS, formObject, handleChangeContactData }: Inpu
                 <input
                     placeholder={capitalize(input)}
                     name={input}
-                    type={input == "phone" ? "phone" :"text"}
+                    type={input === "phone" ? "phone" :"text"}
                     value={
                         formObject[input].value !== ""
                             ? formObject[input].value

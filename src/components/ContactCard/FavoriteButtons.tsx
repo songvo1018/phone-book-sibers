@@ -1,7 +1,6 @@
-import React from "react"
-import { Contact, FavoriteButtonsType } from "../types"
+import { FavoriteButtonsType } from "../types"
 
-const FavoriteButtons = ({ formObject, contact, handleChangeContactData }: FavoriteButtonsType) => {
+const FavoriteButtons = ({ formObject, contact, handleChangeContactData }: FavoriteButtonsType): JSX.Element => {
     
     return (
         <label>

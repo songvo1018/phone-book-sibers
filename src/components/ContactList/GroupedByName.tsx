@@ -1,15 +1,11 @@
 import ContactCard from "../ContactCard/ContactCard"
-import { Contact, GroupedByFirstLetter } from "../../components/types"
+import { Contact, GroupedContactsByNameTypeProps } from "../../components/types"
 import React from "react"
-// type -> interface
-interface Props {
-    groupByLetter: GroupedByFirstLetter
-    handleSaveChanges: any
-}
-const GroupedContactsByName = ({ groupByLetter, handleSaveChanges }: Props) => {
+
+const GroupedContactsByName = ({ groupByLetter, handleSaveChanges }: GroupedContactsByNameTypeProps) : JSX.Element=> {
     return (
-        <div>
-            {Object.keys(groupByLetter).map((letter: any) => {
+        <>
+            {Object.keys(groupByLetter).map((letter: string) => {
                 return (
                     < div className="group" key={letter} >
                         {
@@ -33,7 +29,7 @@ const GroupedContactsByName = ({ groupByLetter, handleSaveChanges }: Props) => {
 
                 )
             })}
-        </div>
+        </>
     )
 }
 

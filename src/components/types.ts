@@ -1,5 +1,3 @@
-import { idText } from "typescript";
-
 interface IObjectKeys {
   [key: string]: string | number;
 }
@@ -7,9 +5,9 @@ interface IObjectKeys {
 export interface FormObject {
   [propName: string] : {
     value: string | number,
-  initialValue: number | string,
-  error: any
-  }
+    initialValue: number | string,
+    error: null | string
+    }
 }
 
 export interface Contact extends IObjectKeys {
@@ -26,7 +24,7 @@ export interface Contact extends IObjectKeys {
 
 export interface ContactCardType {
   contact: Contact
-  handleSaveChanges: any
+  handleSaveChanges: void
 }
 
 export interface GroupedByFirstLetter {
@@ -36,16 +34,25 @@ export interface GroupedByFirstLetter {
 export interface SearchedContactsType {
   searchName: string,
   contactsData: Contact[],
-  handleSaveChanges: any
+  handleSaveChanges: void
 }
 export interface InputFieldsTypes {
   INPUTS: string[],
   formObject: FormObject,
-  handleChangeContactData: any
+  handleChangeContactData: void
 }
 
 export interface FavoriteButtonsType {
   contact: Contact, 
   formObject: FormObject, 
-  handleChangeContactData: any, 
+  handleChangeContactData: void, 
+}
+
+export interface GroupedContactsByNameTypeProps {
+  groupByLetter: GroupedByFirstLetter
+  handleSaveChanges: void
+}
+export interface FavoriteContactsProps {
+  contactsData: Contact[],
+  handleSaveChanges: void
 }

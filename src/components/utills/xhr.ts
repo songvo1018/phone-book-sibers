@@ -1,4 +1,6 @@
-const getDataFromUrl = (method, url, f) => {
+import { Contact } from "../types"
+// create type of response
+const getDataFromUrl = (method: string, url: string): Promise<any> => {
     return new Promise(function (resolve, reject) {
         const xhr = new XMLHttpRequest()
 
@@ -8,8 +10,8 @@ const getDataFromUrl = (method, url, f) => {
         xhr.onload = function () {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     const data = xhr.response;
-
                     return resolve(data)
                 }
                 alert(`Error ${xhr.status}: ${xhr.statusText}`)

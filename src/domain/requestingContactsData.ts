@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { Contact } from "../components/types"
 import getDataFromUrl from "../components/utills/xhr"
-export const getContacts = async (DATA_URL: string) => {
+
+export const getContacts = async (DATA_URL: string): Promise<Contact[]> => {
 
   const xhrResponse = await getDataFromUrl("GET", DATA_URL)
-  // return xhr.response to contact
-  const data = xhrResponse.map((contact: any) => {
-    // return xhr.response
+
+  // converting data to flat structure
+  const data = xhrResponse.map((contact: Contact) => {
     return {
       name: contact.name,
       phone: contact.phone,

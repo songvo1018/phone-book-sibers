@@ -4,19 +4,21 @@ import "./ContactList.css"
 import GroupedContactsByName from "./GroupedByName"
 import FavoriteContacts from "./FavoriteContacts"
 import SearchContacts from "./SearchContacts"
-
-import {Contact, GroupedByFirstLetter} from '../types'
+import {Contact, FormObject, GroupedByFirstLetter} from '../types'
 import { getContacts } from '../../domain/requestingContactsData'
-const DATA_URL : string = "http://demo.sibers.com/users"
+import { ConvertFormObjectInContact} from '../utills/form'
+
+const DATA_URL  = "http://demo.sibers.com/users"
 
 
 
 const groupedLetters = () => {
     // how to set type for 'alphabet'
-    const alphabet : any = []
+    type alphabetLetter = [string, Contact[] | []]
+    const alphabet: Array<alphabetLetter> = []
     function genCharArray(charA: string, charZ: string) {
         let i = charA.charCodeAt(0)
-        let j = charZ.charCodeAt(0)
+        const j = charZ.charCodeAt(0)
         for (; i <= j; ++i) {
             alphabet.push([String.fromCharCode(i), []])
         }
@@ -27,41 +29,26 @@ const groupedLetters = () => {
     return Object.fromEntries(entries)
 }
 
-const ContactList = () => {
+const ContactList = (): JSX.Element => {
     const [isRenderFavorite, setIsRenderFavorite] = useState<boolean>(false)
     const [searchName, setSearchName] = useState<string>("")
 
-    const parsedContactsData = () : Contact[] =>
+    const parsedContactsData = (): Contact[] => 
         JSON.parse(localStorage.getItem("contactsData") || `{}`)
 
     const [contactsData, setContactsData] = useState<Contact[]>(parsedContactsData || [])
 
-    // handler gets contact, finding him in localstorage, and update changes
+    // handler gets contactId and formObject, finding him in localstorage, and replacement changes
 
-    // how to give 'changedContact' correct type, and why Contact not match
-    const handleSaveChanges = (changedContact: any, contactId: any) => {
-        const contactsData = JSON.parse(localStorage.getItem("contactsData") || `{}`)
+    const handleSaveChanges = (formObject: FormObject, contactId: number) => {
+        
         if (contactsData) {
             const currentContact: Contact = contactsData.find(
                 (contact: Contact) => contact.id === contactId
             )
             if (currentContact) {
-                // const field = Object.keys(currentContact)
-                // const updatedContact: any = {}
-                // for (let i = 0; i < field.length; i++) {
-                //     const current = field[i]
-                                        
-                //     // checking if it field is id, because id have not fields "value, initialValue"
-                //     if (changedContact[current] === currentContact.id) {
-                //         updatedContact[current] = currentContact.id
-                //     } else if (changedContact[current].value) {
-                //         updatedContact[current] = changedContact[current].value
-                //     } else {
-                //         updatedContact[current] =
-                //             changedContact[current].initialValue
-                //     }
-                // }
-                contactsData[contactId] = {...currentContact, changedContact}
+                const updatedFormObject = ConvertFormObjectInContact(formObject, currentContact)
+                contactsData[contactId] = { ...currentContact, ...updatedFormObject}
                 localStorage.setItem(
                     "contactsData",
                     JSON.stringify(contactsData)
@@ -73,13 +60,10 @@ const ContactList = () => {
 
     useEffect(() => {
         if (!contactsData || !contactsData.length) {
-            // async functions + setContactsData(contactsData from getContact(from domain)) + setLocalStorage(contactsData from getContact(from domain))
-            getContacts(DATA_URL).then(function (contacts) {
+            void getContacts(DATA_URL).then( (contacts) => {
                 localStorage.setItem("contactsData", JSON.stringify(contacts))
                 setContactsData(contacts)
             })
-            
-            
         }
     }, [contactsData])
 
@@ -112,9 +96,9 @@ const ContactList = () => {
 
     if (contactsData.length) {
         // function => arrowFunction
-        contactsData.sort(function (a, b) {
-            let nameA = a.name.toLowerCase()
-            let nameB = b.name.toLowerCase()
+        contactsData.sort((a, b) => {
+            const nameA = a.name.toLowerCase()
+            const nameB = b.name.toLowerCase()
             if (nameA < nameB) return -1
             if (nameA > nameB) return 1
             return 0
@@ -123,7 +107,7 @@ const ContactList = () => {
     }
 
     return (
-        <div>
+        <>
             <div className="list-header">
                 <label className="header-actions clear">
                     <input
@@ -169,7 +153,7 @@ const ContactList = () => {
                     handleSaveChanges={handleSaveChanges}
                 />
             )}
-        </div>
+        </>
     )
 }
 

@@ -7,35 +7,10 @@ import FavoriteButtons from "./FavoriteButtons"
 import ContactInfo from "./ContactInfo"
 import Image from "../utills/Image/Image"
 import SimpleButton from "./SimpleButton"
-import initializeFormObject from "./form"
-
+import initializeFormObject from "../utills/form"
 import {ContactCardType, FormObject} from '../types'
 
-
 const INPUTS: string[] = ["name", "phone", "city", "company", "website", "avatar"]
-
-// set correct type 'formObject' argument
-// 
-const handleChangeContactData = (event: React.ChangeEvent<HTMLInputElement>, formObject: any, setFormObject: any) => {
-    event.preventDefault()
-    const name = event.target.name
-    const value = event.target.value
-    // rename currentContact -> newFormObject
-    const currentContact = { ...formObject, [name]:{...formObject[name], value, error: !value ? 'error': null} }
-    // const keys = Object.keys(formObject)
-
-
-
-    // for (let i = 0; i < keys.length; i++) {
-    //     const field = keys[i]
-    //     if (field === name) {
-    //         currentContact[field].value = value
-    //     }
-    // }
-    setFormObject(currentContact)
-}
-
-
 
 const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) => {
     const [formObject, setFormObject] = useState<FormObject>({})
@@ -66,6 +41,14 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) => {
             setFormObject(():any => formO)
             setShowMessageEdited(false)
         }
+    }
+
+    const handleChangeContactData = (event: React.ChangeEvent<HTMLInputElement>, formObject: FormObject) => {
+        event.preventDefault()
+        const name = event.target.name
+        const value = event.target.value
+        const currentContact = { ...formObject, [name]: { ...formObject[name], value, error: !value ? 'error' : null } }
+        setFormObject(currentContact)
     }
 
     return (
@@ -111,8 +94,7 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) => {
                                         handleChangeContactData={(event: any) =>
                                             handleChangeContactData(
                                                 event,
-                                                formObject,
-                                                setFormObject
+                                                formObject
                                             )
                                         }
                                     />
@@ -122,8 +104,7 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) => {
                                         handleChangeContactData={(event: any) =>
                                             handleChangeContactData(
                                                 event,
-                                                formObject,
-                                                setFormObject
+                                                formObject
                                             )
                                         }
                                     />
@@ -150,7 +131,7 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) => {
                         ) : (
                             <SimpleButton
                                 handler={() => {
-                                    handleSaveChanges(formObject)
+                                    handleSaveChanges(formObject, contact.id)
                                     setShowMessageEdited(true)
                                     setIsProcessOfEditing(false)
                                 }}
