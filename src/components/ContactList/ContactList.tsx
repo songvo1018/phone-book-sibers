@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 
-reimport "./ContactList.css"
+import "./ContactList.css"
 import GroupedContactsByName from "./GroupedByName"
 import FavoriteContacts from "./FavoriteContacts"
 import SearchContacts from "./SearchContacts"
