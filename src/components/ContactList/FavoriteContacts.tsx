@@ -6,7 +6,7 @@ const FavoriteContacts = ({ contactsData, handleSaveChanges }: {contactsData: an
     return contactsData
         .filter(
             (contact: Contact) =>
-                contact.favorite === true || contact.favorite === "true"
+                contact.favorite === "true"
         )
         .map((contact: Contact) => (
             <ContactCard

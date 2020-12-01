@@ -1,15 +1,26 @@
+import { idText } from "typescript";
 
+interface IObjectKeys {
+  [key: string]: string | number;
+}
 
-export interface Contact {
-  map(arg0: (contact: Contact) => JSX.Element): import("react").ReactNode;
+export interface FormObject {
+  [propName: string] : {
+    value: string | number,
+  initialValue: number | string,
+  error: any
+  }
+}
+
+export interface Contact extends IObjectKeys {
   length: number;
-  name: any
+  name: string
   phone: string
   city: string
   company: string
   website: string
   avatar: string
-  favorite: boolean | string
+  favorite: string
   id: number | string
 }
 
@@ -29,12 +40,12 @@ export interface SearchedContactsType {
 }
 export interface InputFieldsTypes {
   INPUTS: string[],
-  formData: any,
+  formObject: FormObject,
   handleChangeContactData: any
 }
 
 export interface FavoriteButtonsType {
   contact: Contact, 
-  formData: any 
+  formObject: FormObject, 
   handleChangeContactData: any, 
 }

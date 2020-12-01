@@ -1,7 +1,8 @@
 import ContactCard from "../ContactCard/ContactCard"
 import { Contact, GroupedByFirstLetter } from "../../components/types"
 import React from "react"
-type Props = {
+// type -> interface
+interface Props {
     groupByLetter: GroupedByFirstLetter
     handleSaveChanges: any
 }
@@ -12,7 +13,7 @@ const GroupedContactsByName = ({ groupByLetter, handleSaveChanges }: Props) => {
                 return (
                     < div className="group" key={letter} >
                         {
-                            groupByLetter[letter].length > 0 ? (
+                            groupByLetter[letter].length > 0 && (
                                 <div>
                                     {letter.toUpperCase()}
                                     {groupByLetter[letter].map((contact: Contact) => {
@@ -26,7 +27,7 @@ const GroupedContactsByName = ({ groupByLetter, handleSaveChanges }: Props) => {
                                     })}
                                     <hr />
                                 </div>
-                            ) : null
+                            )
                         }
                     </div>
 

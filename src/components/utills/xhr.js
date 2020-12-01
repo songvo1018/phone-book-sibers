@@ -1,4 +1,4 @@
-const getDataFromUrl = (method, url) => {
+const getDataFromUrl = (method, url, f) => {
     return new Promise(function (resolve, reject) {
         const xhr = new XMLHttpRequest()
 
@@ -8,18 +8,7 @@ const getDataFromUrl = (method, url) => {
         xhr.onload = function () {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    const data = xhr.response.map((contact) => {
-                        return {
-                            name: contact.name,
-                            phone: contact.phone,
-                            city: contact.address.city,
-                            company: contact.company.name,
-                            website: contact.website,
-                            avatar: contact.avatar,
-                            favorite: contact.favorite,
-                            id: contact.id,
-                        }
-                    })
+                    const data = xhr.response;
 
                     return resolve(data)
                 }

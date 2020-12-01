@@ -1,21 +1,15 @@
 import React, { useState, useEffect } from "react"
 
-import "./ContactList.css"
-import getDataFromUrl from "../utills/xhr"
+reimport "./ContactList.css"
 import GroupedContactsByName from "./GroupedByName"
 import FavoriteContacts from "./FavoriteContacts"
 import SearchContacts from "./SearchContacts"
 
 import {Contact, GroupedByFirstLetter} from '../types'
-
+import { getContacts } from '../../domain/requestingContactsData'
 const DATA_URL : string = "http://demo.sibers.com/users"
 
-const putDataToLocalStorage = async (DATA_URL: string, setContactsData: any) => {
-    const xhrResponse: Contact[] = await getDataFromUrl("GET", DATA_URL)
-    
-    localStorage.setItem("contactsData", JSON.stringify(xhrResponse))
-    setContactsData(xhrResponse)
-}
+
 
 const groupedLetters = () => {
     // how to set type for 'alphabet'
@@ -40,48 +34,54 @@ const ContactList = () => {
     const parsedContactsData = () : Contact[] =>
         JSON.parse(localStorage.getItem("contactsData") || `{}`)
 
-    const [contactsData, setContactsData] = useState<Contact[] | []>(parsedContactsData || [])
+    const [contactsData, setContactsData] = useState<Contact[]>(parsedContactsData || [])
 
     // handler gets contact, finding him in localstorage, and update changes
 
     // how to give 'changedContact' correct type, and why Contact not match
-    const handleSaveChanges = (changedContact: any) => {
+    const handleSaveChanges = (changedContact: any, contactId: any) => {
         const contactsData = JSON.parse(localStorage.getItem("contactsData") || `{}`)
         if (contactsData) {
             const currentContact: Contact = contactsData.find(
-                (contact: Contact) => contact.id === changedContact.id
+                (contact: Contact) => contact.id === contactId
             )
             if (currentContact) {
-                const field = Object.keys(currentContact)
-                const updatedContact: any = {}
-                for (let i = 0; i < field.length; i++) {
-                    const current = field[i]
+                // const field = Object.keys(currentContact)
+                // const updatedContact: any = {}
+                // for (let i = 0; i < field.length; i++) {
+                //     const current = field[i]
                                         
-                    // checking if it field is id, because id have not fields "value, initialValue"
-                    if (changedContact[current] === currentContact.id) {
-                        updatedContact[current] = currentContact.id
-                    } else if (changedContact[current].value) {
-                        updatedContact[current] = changedContact[current].value
-                    } else {
-                        updatedContact[current] =
-                            changedContact[current].initialValue
-                    }
-                }
-                contactsData[currentContact.id] = updatedContact
+                //     // checking if it field is id, because id have not fields "value, initialValue"
+                //     if (changedContact[current] === currentContact.id) {
+                //         updatedContact[current] = currentContact.id
+                //     } else if (changedContact[current].value) {
+                //         updatedContact[current] = changedContact[current].value
+                //     } else {
+                //         updatedContact[current] =
+                //             changedContact[current].initialValue
+                //     }
+                // }
+                contactsData[contactId] = {...currentContact, changedContact}
                 localStorage.setItem(
                     "contactsData",
                     JSON.stringify(contactsData)
                 )
-                setContactsData(parsedContactsData())
+                setContactsData(contactsData)
             }
         }
     }
 
     useEffect(() => {
         if (!contactsData || !contactsData.length) {
-            putDataToLocalStorage(DATA_URL, setContactsData)
+            // async functions + setContactsData(contactsData from getContact(from domain)) + setLocalStorage(contactsData from getContact(from domain))
+            getContacts(DATA_URL).then(function (contacts) {
+                localStorage.setItem("contactsData", JSON.stringify(contacts))
+                setContactsData(contacts)
+            })
+            
+            
         }
-    }, [])
+    }, [contactsData])
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchName(event.target.value)
@@ -111,9 +111,10 @@ const ContactList = () => {
     //
 
     if (contactsData.length) {
-        contactsData.sort(function (a: { name: { toString: () => string } }, b: { name: { toString: () => string } }) {
-            let nameA = a.name.toString().toLowerCase()
-            let nameB = b.name.toString().toLowerCase()
+        // function => arrowFunction
+        contactsData.sort(function (a, b) {
+            let nameA = a.name.toLowerCase()
+            let nameB = b.name.toLowerCase()
             if (nameA < nameB) return -1
             if (nameA > nameB) return 1
             return 0

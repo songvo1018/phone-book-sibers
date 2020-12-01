@@ -7,8 +7,8 @@ const capitalize = (s: string) => {
     return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-// set correct type 'formData' argument
-const renderInputFields = ({ INPUTS, formData, handleChangeContactData }: InputFieldsTypes) => {
+// set correct type 'formObject' argument
+const renderInputFields = ({ INPUTS, formObject, handleChangeContactData }: InputFieldsTypes) => {
     const inputFields: ReactElement[] = []
 
     INPUTS.map((input) => {
@@ -16,7 +16,7 @@ const renderInputFields = ({ INPUTS, formData, handleChangeContactData }: InputF
             <label key={input}>
                 <span
                     className={
-                        formData[input].value !== ""
+                        formObject[input].value !== ""
                             ? "label-show"
                             : "label-hide"
                     }
@@ -28,9 +28,9 @@ const renderInputFields = ({ INPUTS, formData, handleChangeContactData }: InputF
                     name={input}
                     type={input == "phone" ? "phone" :"text"}
                     value={
-                        formData[input].value !== ""
-                            ? formData[input].value
-                            : formData[input].initialValue
+                        formObject[input].value !== ""
+                            ? formObject[input].value
+                            : formObject[input].initialValue
                     }
                     onChange={(event) => {
                         handleChangeContactData(event)

@@ -1,15 +1,13 @@
 import React from "react"
 import { Contact, FavoriteButtonsType } from "../types"
 
-const FavoriteButtons = ({ formData, contact, handleChangeContactData }: FavoriteButtonsType) => {
-    const initialCompare =
-        formData.favorite.initialValue === true ||
-        formData.favorite.initialValue === "true"
+const FavoriteButtons = ({ formObject, contact, handleChangeContactData }: FavoriteButtonsType) => {
+    
     return (
         <label>
             <span
                 className={
-                    formData.favorite.value !== "" ? "label-show" : "label-hide"
+                    formObject.favorite.value !== "" ? "label-show" : "label-hide"
                 }
             >
                 Changed
@@ -18,7 +16,7 @@ const FavoriteButtons = ({ formData, contact, handleChangeContactData }: Favorit
                 className="button favor"
                 name="favorite"
                 value={
-                    contact.favorite === "true" || contact.favorite === true
+                    contact.favorite === "true"
                         ? "false"
                         : "true"
                 }
@@ -26,7 +24,7 @@ const FavoriteButtons = ({ formData, contact, handleChangeContactData }: Favorit
                     handleChangeContactData(event)
                 }}
             >
-                {initialCompare ? "unfavorite" : "favorite"}
+                {formObject.favorite.initialValue === "true" ? "unfavorite" : "favorite"}
             </button>
         </label>
     )
