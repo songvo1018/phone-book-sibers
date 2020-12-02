@@ -2,7 +2,7 @@ import ContactCard from "../ContactCard/ContactCard"
 import { Contact, GroupedContactsByNameTypeProps } from "../../components/types"
 import React from "react"
 
-const GroupedContactsByName = ({ groupByLetter, handleSaveChanges }: GroupedContactsByNameTypeProps) : JSX.Element=> {
+const GroupedContactsByName = ({ groupByLetter, handleSaveChanges }: GroupedContactsByNameTypeProps): JSX.Element => {
     return (
         <>
             {Object.keys(groupByLetter).map((letter: string) => {

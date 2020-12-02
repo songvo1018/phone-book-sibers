@@ -4,16 +4,15 @@ import "./ContactList.css"
 import GroupedContactsByName from "./GroupedByName"
 import FavoriteContacts from "./FavoriteContacts"
 import SearchContacts from "./SearchContacts"
-import {Contact, FormObjectType, GroupedByFirstLetter} from '../types'
+import { Contact, FormObjectType, GroupedByFirstLetter } from '../types'
 import { getContacts } from '../../domain/requestingContactsData'
-import { convertToObject} from '../utills/form'
+import { convertToObject } from '../utills/form'
 
-const DATA_URL  = "http://demo.sibers.com/users"
+const DATA_URL = "http://demo.sibers.com/users"
 
 
 
 const groupedLetters = () => {
-    // how to set type for 'alphabet'
     type alphabetLetter = [string, Contact[] | []]
     const alphabet: Array<alphabetLetter> = []
     function genCharArray(charA: string, charZ: string) {
@@ -33,8 +32,8 @@ const ContactList = (): JSX.Element => {
     const [isRenderFavorite, setIsRenderFavorite] = useState<boolean>(false)
     const [searchName, setSearchName] = useState<string>("")
     const contactsDataItem = localStorage.getItem("contactsData")
-    let parsedContactsData : Contact[] = []
-    if (typeof contactsDataItem ===  'string' ) {
+    let parsedContactsData: Contact[] = []
+    if (typeof contactsDataItem === 'string') {
         parsedContactsData = JSON.parse(contactsDataItem) as Contact[]
     }
 
@@ -42,14 +41,14 @@ const ContactList = (): JSX.Element => {
 
     // handler gets contactId and formObject, finding him in localstorage, and replacement changes
 
-    const handleSaveChanges = (formObject: FormObjectType, contactId: number ) => {
+    const handleSaveChanges = (formObject: FormObjectType, contactId: number) => {
         if (contactsData) {
             const currentContact = contactsData.find(
                 (contact: Contact) => contact.id === contactId
             )
             if (currentContact) {
                 const updatedFormObject = convertToObject(formObject)
-                contactsData[contactId] = { ...currentContact, ...updatedFormObject}
+                contactsData[contactId] = { ...currentContact, ...updatedFormObject }
                 localStorage.setItem(
                     "contactsData",
                     JSON.stringify(contactsData)
@@ -61,7 +60,7 @@ const ContactList = (): JSX.Element => {
 
     useEffect(() => {
         if (!contactsData || !contactsData.length) {
-            void getContacts(DATA_URL).then( (contacts) => {
+            void getContacts(DATA_URL).then((contacts) => {
                 localStorage.setItem("contactsData", JSON.stringify(contacts))
                 setContactsData(contacts)
             })
@@ -96,7 +95,6 @@ const ContactList = (): JSX.Element => {
     //
 
     if (contactsData.length) {
-        // function => arrowFunction
         contactsData.sort((a, b) => {
             const nameA = a.name.toLowerCase()
             const nameB = b.name.toLowerCase()
@@ -142,18 +140,18 @@ const ContactList = (): JSX.Element => {
                         handleSaveChanges={handleSaveChanges}
                     />
                 ) : (
-                    <FavoriteContacts
+                        <FavoriteContacts
+                            contactsData={contactsData}
+                            handleSaveChanges={handleSaveChanges}
+                        />
+                    )
+            ) : (
+                    <SearchContacts
+                        searchName={searchName}
                         contactsData={contactsData}
                         handleSaveChanges={handleSaveChanges}
                     />
-                )
-            ) : (
-                <SearchContacts
-                    searchName={searchName}
-                    contactsData={contactsData}
-                    handleSaveChanges={handleSaveChanges}
-                />
-            )}
+                )}
         </>
     )
 }

@@ -7,13 +7,15 @@ import FavoriteButtons from "./FavoriteButtons"
 import ContactInfo from "./ContactInfo"
 import Image from "../utills/Image/Image"
 import SimpleButton from "./SimpleButton"
-import {initializeFormObject} from "../utills/form"
-import {ContactCardType, FormObjectGeneric, Contact} from '../types'
+import { initializeFormObject } from "../utills/form"
+import { ContactCardType, FormObjectGeneric, Contact } from '../types'
 
 const INPUTS: string[] = ["name", "phone", "city", "company", "website", "avatar"]
 
-const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) : JSX.Element => {
-    const [formObject, setFormObject] = useState<FormObjectGeneric<Contact>>({})
+const ContactCard = ({ contact, handleSaveChanges }: ContactCardType): JSX.Element => {
+
+    const formObj = initializeFormObject(contact)
+    const [formObject, setFormObject] = useState<FormObjectGeneric<Contact>>(formObj)
     const [showModal, setShowModal] = useState(false)
     const [isProcessOfEditing, setIsProcessOfEditing] = useState(false)
     const [isShowMessageEdited, setShowMessageEdited] = useState(false)
@@ -37,12 +39,11 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) : JSX.Elem
     const handleEditContact = () => {
         setIsProcessOfEditing(true)
         if (!isShowMessageEdited) {
-            const formObj = initializeFormObject(contact)
             setFormObject(formObj)
             setShowMessageEdited(false)
         }
     }
-// передавать в дженерик правильный тип
+    // передавать в дженерик правильный тип
     const handleChangeContactData = (event: React.ChangeEvent<HTMLInputElement>, formObject: FormObjectGeneric<Contact>) => {
         event.preventDefault()
         const name = event.target.name
@@ -51,14 +52,19 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) : JSX.Elem
         setFormObject(currentContact)
     }
 
+    const handleChangeFavoriteContact = (value: string, formObject: FormObjectGeneric<Contact>) => {
+        const name = "favorite"
+        const currentContact = { ...formObject, [name]: { ...formObject[name], value, error: !value ? 'error' : null } }
+        setFormObject(currentContact)
+    }
+
     return (
         <div className="contact">
             <div
-                className={`card${
-                    contact.favorite === "true"
-                        ? " favorite"
-                        : ""
-                }`}
+                className={`card${contact.favorite === "true"
+                    ? " favorite"
+                    : ""
+                    }`}
                 key={contact.id}
                 onClick={handleOpenModal}
             >
@@ -87,29 +93,24 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) : JSX.Elem
                             {!isProcessOfEditing ? (
                                 <ContactInfo contact={contact} />
                             ) : (
-                                <div className="modal-content">
-                                    <InputFields
-                                        INPUTS={INPUTS}
-                                        formObject={formObject}
-                                        handleChangeContactData={(event: React.ChangeEvent<HTMLInputElement>) =>
-                                            handleChangeContactData(
-                                                event,
-                                                formObject
-                                            )
-                                        }
-                                    />
-                                    <FavoriteButtons
-                                        formObject={formObject}
-                                        contact={contact}
-                                        handleChangeContactData={(event: React.ChangeEvent<HTMLInputElement>) =>
-                                            handleChangeContactData(
-                                                event,
-                                                formObject
-                                            )
-                                        }
-                                    />
-                                </div>
-                            )}
+                                    <div className="modal-content">
+                                        <InputFields
+                                            INPUTS={INPUTS}
+                                            formObject={formObject}
+                                            handleChangeContactData={(event: React.ChangeEvent<HTMLInputElement>) =>
+                                                handleChangeContactData(
+                                                    event,
+                                                    formObject
+                                                )
+                                            }
+                                        />
+                                        <FavoriteButtons
+                                            formObject={formObject}
+                                            contact={contact}
+                                            handleChangeFavoriteContact={handleChangeFavoriteContact}
+                                        />
+                                    </div>
+                                )}
                         </div>
                         <div className="close">
                             <SimpleButton
@@ -129,17 +130,17 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) : JSX.Elem
                                 Edit contact
                             </SimpleButton>
                         ) : (
-                            <SimpleButton
-                                handler={() => {
-                                    handleSaveChanges(formObject, contact.id)
-                                    setShowMessageEdited(true)
-                                    setIsProcessOfEditing(false)
-                                }}
-                                className={"button"}
-                            >
-                                Save changes
-                            </SimpleButton>
-                        )}
+                                <SimpleButton
+                                    handler={() => {
+                                        handleSaveChanges(formObject, contact.id)
+                                        setShowMessageEdited(true)
+                                        setIsProcessOfEditing(false)
+                                    }}
+                                    className={"button"}
+                                >
+                                    Save changes
+                                </SimpleButton>
+                            )}
                         {isShowMessageEdited && (
                             <span className="edited-message">
                                 Changes saved

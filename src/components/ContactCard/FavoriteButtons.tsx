@@ -1,7 +1,10 @@
-import { FavoriteButtonsType } from "../types"
+import { FavoriteButtonsType } from "../types";
 
-const FavoriteButtons = ({ formObject, contact, handleChangeContactData }: FavoriteButtonsType): JSX.Element => {
-    
+const FavoriteButtons = ({
+    formObject,
+    contact,
+    handleChangeFavoriteContact,
+}: FavoriteButtonsType): JSX.Element => {
     return (
         <label>
             <span
@@ -10,23 +13,22 @@ const FavoriteButtons = ({ formObject, contact, handleChangeContactData }: Favor
                 }
             >
                 Changed
-            </span>
+			</span>
             <button
                 className="button favor"
                 name="favorite"
-                value={
-                    contact.favorite === "true"
-                        ? "false"
-                        : "true"
-                }
-                onClick={(event) => {
-                    handleChangeContactData(event)
+                value={contact.favorite === "true" ? "false" : "true"}
+                onClick={() => {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                    handleChangeFavoriteContact(contact.favorite, formObject);
                 }}
             >
-                {formObject.favorite.initialValue === "true" ? "unfavorite" : "favorite"}
+                {formObject.favorite.initialValue === "true"
+                    ? "unfavorite"
+                    : "favorite"}
             </button>
         </label>
-    )
-}
+    );
+};
 
-export default FavoriteButtons
+export default FavoriteButtons;

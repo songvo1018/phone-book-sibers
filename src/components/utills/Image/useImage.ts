@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 
-import loadImage from "./loadImage.js"
+import loadImage from "./loadImage"
 
 const cache = new Map()
 
@@ -10,8 +10,9 @@ export const Status = {
     FAILED: "failed",
 }
 
-export default function useImage(src) {
-    const cachedImg = cache.get(src)
+export default function useImage(src: string): (string | HTMLElement)[] {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const cachedImg: HTMLElement = cache.get(src)
     const initialState = cachedImg ? Status.LOADED : Status.LOADING
     const [status, setStatus] = useState(initialState)
     const mounted = useRef(false)
@@ -22,6 +23,7 @@ export default function useImage(src) {
             mounted.current = true
 
             try {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 const image = await loadImage(src)
                 if (!mounted.current) return
 
@@ -37,7 +39,7 @@ export default function useImage(src) {
                 mounted.current = false
             }
         }
-        getImg()
+        void getImg()
     }, [src, status])
 
     return [status, cachedImg]

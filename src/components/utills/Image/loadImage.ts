@@ -1,4 +1,5 @@
-export default (url, crossOrigin) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default (url: string, crossOrigin?: string): Promise<any> => {
     const image = new Image()
 
     // Support cross origin requests
@@ -6,7 +7,8 @@ export default (url, crossOrigin) => {
 
     return new Promise((resolve, reject) => {
         // Load Handler
-        const loaded = (event) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const loaded = (event: { target: any; srcElement: any }) => {
             // Cleanup our image element, we no longer need it
             unbindEvents(image)
             // Fulfill our promise with the event image element, even in older browsers
@@ -14,7 +16,8 @@ export default (url, crossOrigin) => {
         }
 
         // Error Handler
-        const errored = (error) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const errored = (error: any) => {
             // Cleanup our image element, we no longer need it
             unbindEvents(image)
             // Forward our error to the user
@@ -31,7 +34,7 @@ export default (url, crossOrigin) => {
     })
 }
 
-function unbindEvents(image) {
+function unbindEvents(image: HTMLImageElement) {
     // Reset callbacks
     image.onload = null
     image.onerror = null
@@ -40,7 +43,7 @@ function unbindEvents(image) {
     try {
         // Some browsers need you to remove the src
         // in order to garbage collect the image object
-        delete image.src
+        // delete image.src
     } catch (e) {
         // Safari's strict mode throws, ignore
     }

@@ -1,9 +1,15 @@
-import useImage, { Status } from "./useImage.js"
+import useImage, { Status } from "./useImage"
 
 import avatar from "./avatar.svg"
 import "./spinner.css"
 
-export default function Image({ src, alt }) {
+type Image = {
+    src: string,
+    alt: string
+}
+
+export default function Image({ src, alt }: Image): JSX.Element {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const [status] = useImage(src)
 
     if (status === Status.LOADING) {

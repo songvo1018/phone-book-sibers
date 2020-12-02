@@ -1,6 +1,8 @@
 
 // create type of response
 
+import { DataItem } from "../../domain/requestingTypes"
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getDataFromUrl = (method: string, url: string): Promise<any> => {
     return new Promise(function (resolve, reject) {
@@ -13,7 +15,7 @@ const getDataFromUrl = (method: string, url: string): Promise<any> => {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    const data = xhr.response;
+                    const data: DataItem[] = xhr.response;
                     return resolve(data)
                 }
                 alert(`Error ${xhr.status}: ${xhr.statusText}`)

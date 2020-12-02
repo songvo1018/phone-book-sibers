@@ -1,71 +1,71 @@
 .group {
-    padding: 16px 0;
+	padding: 16px 0;
 }
 
 .list-header {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    margin: 0 auto;
-    margin-top: 20px;
-    max-width: 300px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	margin: 0 auto;
+	margin-top: 20px;
+	max-width: 300px;
 }
 
 .list-header label {
-    margin: 0 auto;
-    border: none;
-    border-bottom: 1px solid #bababa;
-    border-radius: 8px;
+	margin: 0 auto;
+	border: none;
+	border-bottom: 1px solid #bababa;
+	border-radius: 8px;
 }
 
 .header-actions {
-    padding: 8px 12px 4px 8px;
-    border: none;
-    margin-bottom: 4px;
-    line-height: 25px;
-    max-width: 160px;
-    background: none;
+	padding: 8px 12px 4px 8px;
+	border: none;
+	margin-bottom: 4px;
+	line-height: 25px;
+	max-width: 160px;
+	background: none;
 }
 
 .header-actions.clear:hover {
-    background: #d8d8d8;
-    transition: 0.3s;
+	background: #d8d8d8;
+	transition: 0.3s;
 }
 
 .header-actions button {
-    background: none;
-    border: none;
+	background: none;
+	border: none;
 }
 
 .button-favorite {
-    font-size: 14px;
+	font-size: 14px;
 }
 
 .button-favorite:hover {
-    background: orange;
-    transition: 0.4s;
+	background: orange;
+	transition: 0.4s;
 }
 
 hr {
-    border: 0;
-    height: 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    max-width: 260px;
+	border: 0;
+	height: 0;
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+	max-width: 260px;
 }
 
 @media only screen and (min-width: 400px) {
-    .list-header {
-        display: flex;
-        justify-content: space-between;
-        flex-direction: row;
-        max-width: 390px;
-    }
+	.list-header {
+		display: flex;
+		justify-content: space-between;
+		flex-direction: row;
+		max-width: 390px;
+	}
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-    .list-header {
-        max-width: 460px;
-    }
+	.list-header {
+		max-width: 460px;
+	}
 }
