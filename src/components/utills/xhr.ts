@@ -1,5 +1,7 @@
-import { Contact } from "../types"
+
 // create type of response
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getDataFromUrl = (method: string, url: string): Promise<any> => {
     return new Promise(function (resolve, reject) {
         const xhr = new XMLHttpRequest()

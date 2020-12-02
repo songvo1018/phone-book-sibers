@@ -7,13 +7,13 @@ import FavoriteButtons from "./FavoriteButtons"
 import ContactInfo from "./ContactInfo"
 import Image from "../utills/Image/Image"
 import SimpleButton from "./SimpleButton"
-import initializeFormObject from "../utills/form"
-import {ContactCardType, FormObject} from '../types'
+import {initializeFormObject} from "../utills/form"
+import {ContactCardType, FormObjectGeneric, Contact} from '../types'
 
 const INPUTS: string[] = ["name", "phone", "city", "company", "website", "avatar"]
 
-const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) => {
-    const [formObject, setFormObject] = useState<FormObject>({})
+const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) : JSX.Element => {
+    const [formObject, setFormObject] = useState<FormObjectGeneric<Contact>>({})
     const [showModal, setShowModal] = useState(false)
     const [isProcessOfEditing, setIsProcessOfEditing] = useState(false)
     const [isShowMessageEdited, setShowMessageEdited] = useState(false)
@@ -37,13 +37,13 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) => {
     const handleEditContact = () => {
         setIsProcessOfEditing(true)
         if (!isShowMessageEdited) {
-            const formO = initializeFormObject(contact)
-            setFormObject(():any => formO)
+            const formObj = initializeFormObject(contact)
+            setFormObject(formObj)
             setShowMessageEdited(false)
         }
     }
-
-    const handleChangeContactData = (event: React.ChangeEvent<HTMLInputElement>, formObject: FormObject) => {
+// передавать в дженерик правильный тип
+    const handleChangeContactData = (event: React.ChangeEvent<HTMLInputElement>, formObject: FormObjectGeneric<Contact>) => {
         event.preventDefault()
         const name = event.target.name
         const value = event.target.value
@@ -91,7 +91,7 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) => {
                                     <InputFields
                                         INPUTS={INPUTS}
                                         formObject={formObject}
-                                        handleChangeContactData={(event: any) =>
+                                        handleChangeContactData={(event: React.ChangeEvent<HTMLInputElement>) =>
                                             handleChangeContactData(
                                                 event,
                                                 formObject
@@ -101,7 +101,7 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType) => {
                                     <FavoriteButtons
                                         formObject={formObject}
                                         contact={contact}
-                                        handleChangeContactData={(event: any) =>
+                                        handleChangeContactData={(event: React.ChangeEvent<HTMLInputElement>) =>
                                             handleChangeContactData(
                                                 event,
                                                 formObject

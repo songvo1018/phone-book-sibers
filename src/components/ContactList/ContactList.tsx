@@ -4,9 +4,9 @@ import "./ContactList.css"
 import GroupedContactsByName from "./GroupedByName"
 import FavoriteContacts from "./FavoriteContacts"
 import SearchContacts from "./SearchContacts"
-import {Contact, FormObject, GroupedByFirstLetter} from '../types'
+import {Contact, FormObjectType, GroupedByFirstLetter} from '../types'
 import { getContacts } from '../../domain/requestingContactsData'
-import { ConvertFormObjectInContact} from '../utills/form'
+import { convertToObject} from '../utills/form'
 
 const DATA_URL  = "http://demo.sibers.com/users"
 
@@ -32,22 +32,23 @@ const groupedLetters = () => {
 const ContactList = (): JSX.Element => {
     const [isRenderFavorite, setIsRenderFavorite] = useState<boolean>(false)
     const [searchName, setSearchName] = useState<string>("")
-
-    const parsedContactsData = (): Contact[] => 
-        JSON.parse(localStorage.getItem("contactsData") || `{}`)
+    const contactsDataItem = localStorage.getItem("contactsData")
+    let parsedContactsData : Contact[] = []
+    if (typeof contactsDataItem ===  'string' ) {
+        parsedContactsData = JSON.parse(contactsDataItem) as Contact[]
+    }
 
     const [contactsData, setContactsData] = useState<Contact[]>(parsedContactsData || [])
 
     // handler gets contactId and formObject, finding him in localstorage, and replacement changes
 
-    const handleSaveChanges = (formObject: FormObject, contactId: number) => {
-        
+    const handleSaveChanges = (formObject: FormObjectType, contactId: number ) => {
         if (contactsData) {
-            const currentContact: Contact = contactsData.find(
+            const currentContact = contactsData.find(
                 (contact: Contact) => contact.id === contactId
             )
             if (currentContact) {
-                const updatedFormObject = ConvertFormObjectInContact(formObject, currentContact)
+                const updatedFormObject = convertToObject(formObject)
                 contactsData[contactId] = { ...currentContact, ...updatedFormObject}
                 localStorage.setItem(
                     "contactsData",

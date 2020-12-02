@@ -1,31 +1,31 @@
-import { Contact, FormObject } from "../types"
+import { FormObjectGeneric } from "../types"
 
-const initializeFormObject = (contact: Contact): FormObject => {
-    const formObject : FormObject = {}
-    for (const key in contact) {
+export const initializeFormObject = <T> (object: T): FormObjectGeneric<T> => {
+    const formObject = {} as FormObjectGeneric<T>
+    for (const key in object) {
+        const value = object[key]
         formObject[key] = {
-            value: '',
-            initialValue: contact[key],
+            value,
+            initialValue: value,
             error: null
         }
     }
+
     return formObject
 }
 
-export default initializeFormObject
-
-export const ConvertFormObjectInContact = (formObject: FormObject, contact: Contact): Contact => {
-    const changedContact = {}
+export const convertToObject = <T>(formObject: FormObjectGeneric<T>): T => {
+    const object = {} as T
     for (const key in formObject) {
-        if (formObject[key].value === formObject[key].initialValue) {
-            continue
-        } else {
-            if (formObject[key].value !== '') {
-                contact[key] = formObject[key].value
-            }
-        }
-        
+        object[key] = formObject[key].value
     }
-    // WHY ITS WORK?
-    return changedContact
+
+    return object
 }
+
+// const contact = {} as Contact
+
+// const formObject = initializeFormObject(contact)
+
+// const formData = convertToObject(formObject)
+// formData
