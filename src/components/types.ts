@@ -35,7 +35,7 @@ export interface FormObjectType {
 export interface SearchedContactsType {
   searchName: string,
   contactsData: Contact[],
-  handleSaveChanges: (agr0: FormObjectType, arg1: number) => void
+  handleSaveChanges: (agr0: FormObjectGeneric<Contact>, arg1: number) => void
 }
 
 
@@ -43,7 +43,7 @@ export interface FavoriteButtonsType {
   contact: Contact,
   formObject: FormObjectGeneric<Contact>,
   handleChangeFavoriteContact: (
-    value: string,
+    reverseValue: string,
     formObject: FormObjectGeneric<Contact>
   ) => void,
 }
@@ -54,16 +54,16 @@ export interface GroupedByFirstLetter {
 
 export interface GroupedContactsByNameTypeProps {
   groupByLetter: GroupedByFirstLetter
-  handleSaveChanges: (agr0: FormObjectType, arg1: number) => void
+  handleSaveChanges: (agr0: FormObjectGeneric<Contact>, arg1: number) => void
 }
 export interface FavoriteContactsProps {
   contactsData: Contact[],
-  handleSaveChanges: (agr0: FormObjectType, arg1: number) => void
+  handleSaveChanges: (agr0: FormObjectGeneric<Contact>, arg1: number) => void
 }
 
 export interface ContactCardType {
   contact: Contact
-  handleSaveChanges: (agr0: FormObjectType, arg1: number) => void
+  handleSaveChanges: (agr0: FormObjectGeneric<Contact>, arg1: number) => void
 }
 
 export interface SimpleButtonProps {
@@ -73,6 +73,6 @@ export interface SimpleButtonProps {
 }
 export interface InputFieldsTypes {
   INPUTS: string[],
-  formObject: FormObjectType,
-  handleChangeContactData: (event: React.ChangeEvent<HTMLInputElement>, formObject: FormObjectType) => void
+  formObject: FormObjectGeneric<Contact>,
+  handleChangeContactData: (event: React.ChangeEvent<HTMLInputElement>, formObject: FormObjectGeneric<Contact>) => void
 }

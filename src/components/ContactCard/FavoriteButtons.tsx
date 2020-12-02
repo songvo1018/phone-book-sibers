@@ -9,7 +9,7 @@ const FavoriteButtons = ({
         <label>
             <span
                 className={
-                    formObject.favorite.value !== "" ? "label-show" : "label-hide"
+                    formObject.favorite.value !== formObject.favorite.initialValue ? "label-show" : "label-hide"
                 }
             >
                 Changed
@@ -17,10 +17,10 @@ const FavoriteButtons = ({
             <button
                 className="button favor"
                 name="favorite"
-                value={contact.favorite === "true" ? "false" : "true"}
+                value={formObject.favorite.value === "true" ? "false" : "true"}
                 onClick={() => {
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-                    handleChangeFavoriteContact(contact.favorite, formObject);
+                    handleChangeFavoriteContact(formObject.favorite.value, formObject);
                 }}
             >
                 {formObject.favorite.initialValue === "true"

@@ -4,7 +4,7 @@ import "./ContactList.css"
 import GroupedContactsByName from "./GroupedByName"
 import FavoriteContacts from "./FavoriteContacts"
 import SearchContacts from "./SearchContacts"
-import { Contact, FormObjectType, GroupedByFirstLetter } from '../types'
+import { Contact, FormObjectGeneric, FormObjectType, GroupedByFirstLetter } from '../types'
 import { getContacts } from '../../domain/requestingContactsData'
 import { convertToObject } from '../utills/form'
 
@@ -41,14 +41,35 @@ const ContactList = (): JSX.Element => {
 
     // handler gets contactId and formObject, finding him in localstorage, and replacement changes
 
-    const handleSaveChanges = (formObject: FormObjectType, contactId: number) => {
+   
+
+    useEffect(() => {
+        if (!contactsData || !contactsData.length) {
+            void getContacts(DATA_URL).then((contacts) => {
+                localStorage.setItem("contactsData", JSON.stringify(contacts))
+                setContactsData(contacts)
+            })
+
+            
+        } 
+        groupContacts()
+    }, [contactsData])
+
+
+    
+    const handleSaveChanges = (formObject: FormObjectGeneric<Contact>, contactId: number) => {
+        console.log(formObject);
+
         if (contactsData) {
             const currentContact = contactsData.find(
                 (contact: Contact) => contact.id === contactId
             )
             if (currentContact) {
                 const updatedFormObject = convertToObject(formObject)
-                contactsData[contactId] = { ...currentContact, ...updatedFormObject }
+                const index = contactsData.findIndex(contact => contact.id === contactId )
+                contactsData[index] = updatedFormObject
+                // eslint-disable-next-line no-debugger
+                debugger
                 localStorage.setItem(
                     "contactsData",
                     JSON.stringify(contactsData)
@@ -57,15 +78,6 @@ const ContactList = (): JSX.Element => {
             }
         }
     }
-
-    useEffect(() => {
-        if (!contactsData || !contactsData.length) {
-            void getContacts(DATA_URL).then((contacts) => {
-                localStorage.setItem("contactsData", JSON.stringify(contacts))
-                setContactsData(contacts)
-            })
-        }
-    }, [contactsData])
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchName(event.target.value)
@@ -79,6 +91,12 @@ const ContactList = (): JSX.Element => {
     // filling the array with contacts by their first letter of the name
     //
 
+
+
+    // check if the data is loaded
+    //
+
+
     const groupContacts = () => {
         for (let i = 0; i < contactsData.length; i++) {
             const element = contactsData[i]
@@ -91,9 +109,6 @@ const ContactList = (): JSX.Element => {
         }
     }
 
-    // check if the data is loaded
-    //
-
     if (contactsData.length) {
         contactsData.sort((a, b) => {
             const nameA = a.name.toLowerCase()
@@ -104,6 +119,7 @@ const ContactList = (): JSX.Element => {
         })
         groupContacts()
     }
+    
 
     return (
         <>

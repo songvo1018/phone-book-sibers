@@ -13,7 +13,7 @@ const renderInputFields = ({ INPUTS, formObject, handleChangeContactData }: Inpu
             <label key={input}>
                 <span
                     className={
-                        formObject[input].value !== ""
+                        formObject[input].value !== formObject[input].initialValue
                             ? "label-show"
                             : "label-hide"
                     }
@@ -25,7 +25,7 @@ const renderInputFields = ({ INPUTS, formObject, handleChangeContactData }: Inpu
                     name={input}
                     type={input === "phone" ? "phone" : "text"}
                     value={
-                        formObject[input].value !== ""
+                        formObject[input].value !== formObject[input].initialValue
                             ? formObject[input].value
                             : formObject[input].initialValue
                     }

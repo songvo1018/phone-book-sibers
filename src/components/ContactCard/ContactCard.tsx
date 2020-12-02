@@ -52,10 +52,15 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType): JSX.Eleme
         setFormObject(currentContact)
     }
 
-    const handleChangeFavoriteContact = (value: string, formObject: FormObjectGeneric<Contact>) => {
+    const handleChangeFavoriteContact = (reverseValue: string, formObject: FormObjectGeneric<Contact>) => {
+
+        const value = reverseValue === "true" ? "false" : "true"
         const name = "favorite"
         const currentContact = { ...formObject, [name]: { ...formObject[name], value, error: !value ? 'error' : null } }
+
         setFormObject(currentContact)
+        console.log(currentContact);
+        
     }
 
     return (
