@@ -1,6 +1,8 @@
 
-import { Contact } from '../types'
-const ContactInfo = ({ contact }: { contact: Contact }): JSX.Element => {
+import { ContactInfoType } from '../types'
+
+const ContactInfo = ({ contact }: ContactInfoType): JSX.Element => {
+    
     return (
         <div className="modal-content">
             <div className="modal-text">{contact.name}</div>

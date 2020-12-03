@@ -2,7 +2,7 @@ import React from "react"
 import ContactCard from "../ContactCard/ContactCard"
 import { Contact, FavoriteContactsProps } from "../types"
 
-const FavoriteContacts = ({ contactsData, handleSaveChanges }: FavoriteContactsProps) => {
+const FavoriteContacts = ({ contactsData, handleSaveChanges }: FavoriteContactsProps): JSX.Element=> {
     return (<>
         {contactsData
             .filter(

@@ -2,7 +2,6 @@ import { FavoriteButtonsType } from "../types";
 
 const FavoriteButtons = ({
     formObject,
-    contact,
     handleChangeFavoriteContact,
 }: FavoriteButtonsType): JSX.Element => {
     return (
@@ -19,7 +18,6 @@ const FavoriteButtons = ({
                 name="favorite"
                 value={formObject.favorite.value === "true" ? "false" : "true"}
                 onClick={() => {
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                     handleChangeFavoriteContact(formObject.favorite.value, formObject);
                 }}
             >

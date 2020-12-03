@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react"
 import Modal from "react-modal"
 
 import "./ContactCard.css"
-import InputFields from "./InputFields"
-import FavoriteButtons from "./FavoriteButtons"
+import ContactEdit from "./ContactEdit"
 import ContactInfo from "./ContactInfo"
 import Image from "../utills/Image/Image"
 import SimpleButton from "./SimpleButton"
@@ -13,7 +12,6 @@ import { ContactCardType, FormObjectGeneric, Contact } from '../types'
 const INPUTS: string[] = ["name", "phone", "city", "company", "website", "avatar"]
 
 const ContactCard = ({ contact, handleSaveChanges }: ContactCardType): JSX.Element => {
-
     const formObj = initializeFormObject(contact)
     const [formObject, setFormObject] = useState<FormObjectGeneric<Contact>>(formObj)
     const [showModal, setShowModal] = useState(false)
@@ -43,7 +41,7 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType): JSX.Eleme
             setShowMessageEdited(false)
         }
     }
-    // передавать в дженерик правильный тип
+
     const handleChangeContactData = (event: React.ChangeEvent<HTMLInputElement>, formObject: FormObjectGeneric<Contact>) => {
         event.preventDefault()
         const name = event.target.name
@@ -53,14 +51,10 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType): JSX.Eleme
     }
 
     const handleChangeFavoriteContact = (reverseValue: string, formObject: FormObjectGeneric<Contact>) => {
-
         const value = reverseValue === "true" ? "false" : "true"
         const name = "favorite"
         const currentContact = { ...formObject, [name]: { ...formObject[name], value, error: !value ? 'error' : null } }
-
         setFormObject(currentContact)
-        console.log(currentContact);
-        
     }
 
     return (
@@ -98,23 +92,13 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType): JSX.Eleme
                             {!isProcessOfEditing ? (
                                 <ContactInfo contact={contact} />
                             ) : (
-                                    <div className="modal-content">
-                                        <InputFields
-                                            INPUTS={INPUTS}
-                                            formObject={formObject}
-                                            handleChangeContactData={(event: React.ChangeEvent<HTMLInputElement>) =>
-                                                handleChangeContactData(
-                                                    event,
-                                                    formObject
-                                                )
-                                            }
-                                        />
-                                        <FavoriteButtons
-                                            formObject={formObject}
-                                            contact={contact}
-                                            handleChangeFavoriteContact={handleChangeFavoriteContact}
-                                        />
-                                    </div>
+                                    <ContactEdit
+                                        INPUTS={INPUTS}
+                                        formObject={formObject}
+                                        contact={contact}
+                                        handleChangeContactData={handleChangeContactData}
+                                        handleChangeFavoriteContact={handleChangeFavoriteContact}
+                                    />
                                 )}
                         </div>
                         <div className="close">

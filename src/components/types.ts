@@ -53,7 +53,7 @@ export interface GroupedByFirstLetter {
 }
 
 export interface GroupedContactsByNameTypeProps {
-  groupByLetter: GroupedByFirstLetter
+  contactsData: Contact[],
   handleSaveChanges: (agr0: FormObjectGeneric<Contact>, arg1: number) => void
 }
 export interface FavoriteContactsProps {
@@ -64,6 +64,22 @@ export interface FavoriteContactsProps {
 export interface ContactCardType {
   contact: Contact
   handleSaveChanges: (agr0: FormObjectGeneric<Contact>, arg1: number) => void
+}
+
+
+export interface ContactInfoType {
+  contact: Contact
+}
+
+export interface ContactEditType {
+  INPUTS: string[],
+  formObject: FormObjectGeneric<Contact>,
+  contact: Contact,
+  handleChangeContactData: (event: React.ChangeEvent<HTMLInputElement>, formObject: FormObjectGeneric<Contact>) => void
+  handleChangeFavoriteContact: (
+    reverseValue: string,
+    formObject: FormObjectGeneric<Contact>
+  ) => void,
 }
 
 export interface SimpleButtonProps {

@@ -21,5 +21,15 @@ export const getContacts = async (DATA_URL: string): Promise<Contact[]> => {
       id: dataItam.id,
     }
   })
+  if (data.length) {
+    data.sort((a, b) => {
+      const nameA = a.name.toLowerCase()
+      const nameB = b.name.toLowerCase()
+      if (nameA < nameB) return -1
+      if (nameA > nameB) return 1
+      return 0
+    })
+  }
+  
   return data
 }
