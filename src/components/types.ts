@@ -66,6 +66,18 @@ export interface ContactCardType {
   handleSaveChanges: (agr0: FormObjectGeneric<Contact>, arg1: number) => void
 }
 
+export interface IContactBody {
+  isProcessOfEditing: boolean,
+  contact: Contact,
+  INPUTS: string[],
+  formObject: FormObjectGeneric<Contact>,
+  handleChangeContactData: (event: React.ChangeEvent<HTMLInputElement>, formObject: FormObjectGeneric<Contact>) => void
+  handleChangeFavoriteContact: (
+    reverseValue: string,
+    formObject: FormObjectGeneric<Contact>
+  ) => void,
+}
+
 
 export interface ContactInfoType {
   contact: Contact

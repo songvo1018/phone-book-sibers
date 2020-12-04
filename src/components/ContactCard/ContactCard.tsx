@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react"
 import Modal from "react-modal"
 
 import "./ContactCard.css"
-import ContactEdit from "./ContactEdit"
-import ContactInfo from "./ContactInfo"
+import ContactBody from "./ContactBody"
 import Image from "../utills/Image/Image"
 import SimpleButton from "./SimpleButton"
 import { initializeFormObject } from "../utills/form"
@@ -83,23 +82,18 @@ const ContactCard = ({ contact, handleSaveChanges }: ContactCardType): JSX.Eleme
                 <div className="modal-window">
                     <div className="modal-header">
                         <div className="modal-container">
-                            <div className="avatar">
-                                <Image
-                                    src={contact.avatar}
-                                    alt={contact.name}
-                                />
-                            </div>
-                            {!isProcessOfEditing ? (
-                                <ContactInfo contact={contact} />
-                            ) : (
-                                    <ContactEdit
-                                        INPUTS={INPUTS}
-                                        formObject={formObject}
-                                        contact={contact}
-                                        handleChangeContactData={handleChangeContactData}
-                                        handleChangeFavoriteContact={handleChangeFavoriteContact}
-                                    />
-                                )}
+                            <Image
+                                src={contact.avatar}
+                                alt={contact.name}
+                            />
+                            <ContactBody
+                                isProcessOfEditing={isProcessOfEditing}
+                                contact={contact}
+                                INPUTS={INPUTS}
+                                formObject={formObject}
+                                handleChangeContactData={handleChangeContactData}
+                                handleChangeFavoriteContact={handleChangeFavoriteContact}
+                            />
                         </div>
                         <div className="close">
                             <SimpleButton

@@ -6,7 +6,6 @@ export const getContacts = async (DATA_URL: string): Promise<Contact[]> => {
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const xhrResponse: DataItem[] = await getDataFromUrl("GET", DATA_URL)
-  console.log(xhrResponse);
 
   // converting data to flat structure
   const data: Contact[] = xhrResponse.map((dataItam: DataItem) => {

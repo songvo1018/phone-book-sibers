@@ -23,5 +23,9 @@ export default function Image({ src, alt }: Image): JSX.Element {
         source = src
     }
 
-    return <img alt={alt} src={source} />
+    return (
+        <div className="avatar">
+            <img alt={alt} src={source} />
+        </div>
+    )
 }
