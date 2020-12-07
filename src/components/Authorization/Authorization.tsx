@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import React, { FormEvent, useState } from "react";
 import "./Auth.css";
 import { IAuthState, validateControlType } from "./authTypes";
@@ -50,6 +48,7 @@ const Authorization = ({ handleAuthChange }: AuthorizationProps): JSX.Element =>
 		const password = state.formControls.password.value
 		alert(`Welcome! Your email: ${email}. Password: ${password}`)
 		if (state.isFormValid) {
+			// async post request with auth data
 			handleAuthChange(true)
 		}
 	};
@@ -57,6 +56,8 @@ const Authorization = ({ handleAuthChange }: AuthorizationProps): JSX.Element =>
 	const registerHandler = () => {
 		const email = state.formControls.email.value
 		const password = state.formControls.password.value
+
+		// async post request with auth data
 		alert(`Your email: ${email}. Password: ${password}. Good to see You!`)
 	};
 
@@ -85,6 +86,7 @@ const Authorization = ({ handleAuthChange }: AuthorizationProps): JSX.Element =>
 		}
 
 		if (validation.email) {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 			isValid = is.email(value) && isValid;
 		}
 

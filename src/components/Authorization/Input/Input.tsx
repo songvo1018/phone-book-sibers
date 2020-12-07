@@ -10,7 +10,7 @@ type Props = {
   label: string
   shouldValidate: boolean
   errorMessage: string
-  onChange: any
+  onChange: ((event: React.ChangeEvent<HTMLInputElement>) => void) | undefined
 }
 
 interface IIsInvalidType {
@@ -40,7 +40,6 @@ const Input = (props: Props): JSX.Element => {
         type={inputType}
         id={htmlFor}
         value={props.value}
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         onChange={props.onChange}
       />
       {

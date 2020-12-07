@@ -5,7 +5,7 @@ type Props = {
   type: string
   disabled: boolean
   children: string
-  onClick: any
+  onClick: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined
 }
 const Button = (props: Props): JSX.Element=> {
   const cls = [
@@ -17,7 +17,6 @@ const Button = (props: Props): JSX.Element=> {
     <button
     className={cls.join(' ')}
     disabled={props.disabled}
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     onClick={props.onClick}
     >
       {props.children}
