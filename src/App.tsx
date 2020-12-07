@@ -6,6 +6,7 @@ function App(): JSX.Element {
     return (
         <div className="App">
             <header className="App-header">Phone book</header>
+            {/*  */}
             <ContactList />
         </div>
     )

@@ -24,7 +24,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "eslint": "eslint --cache --ext .js,.jsx,.ts,.tsx src",
-  "eslint:dump": "eslint --print-config ./.eslintrc.json"
+    "eslint:dump": "eslint --print-config ./.eslintrc.json"
   },
   "eslintConfig": {
     "extends": [
