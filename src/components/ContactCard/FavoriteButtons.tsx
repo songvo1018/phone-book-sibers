@@ -1,5 +1,6 @@
 import React from "react";
 import { FavoriteButtonsType } from "../types";
+import SimpleButton from "./SimpleButton";
 
 const FavoriteButtons = ({
     formObject,
@@ -14,18 +15,16 @@ const FavoriteButtons = ({
             >
                 Changed
 			</span>
-            <button
+            <SimpleButton
                 className="button favor"
-                name="favorite"
-                value={formObject.favorite.value === "true" ? "false" : "true"}
-                onClick={() => {
+                handler={() => {
                     handleChangeFavoriteContact(formObject.favorite.value, formObject);
                 }}
             >
                 {formObject.favorite.initialValue === "true"
                     ? "unfavorite"
                     : "favorite"}
-            </button>
+            </SimpleButton>
         </label>
     );
 };
