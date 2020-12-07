@@ -20,6 +20,14 @@ input {
     background: none;
     font-size: 14px;
 }
+.logout {
+	background: none;
+	border: none;
+	border-bottom: 1px solid #bababa;
+	border-radius: 4px;
+	padding: 16px 22px 12px 8px;
+	margin: 10px;
+}
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 400px) {
     .App {

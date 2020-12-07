@@ -1,3 +1,4 @@
+import React from "react"
 import useImage, { Status } from "./useImage"
 
 import avatar from "./avatar.svg"

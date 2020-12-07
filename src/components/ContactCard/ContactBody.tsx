@@ -1,3 +1,4 @@
+import React from "react"
 import ContactInfo from "./ContactInfo"
 import ContactEdit from "./ContactEdit"
 import {IContactBody} from '../types'

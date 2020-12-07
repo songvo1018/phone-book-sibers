@@ -1,3 +1,4 @@
+import React from "react";
 import { FavoriteButtonsType } from "../types";
 
 const FavoriteButtons = ({

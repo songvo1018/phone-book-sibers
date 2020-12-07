@@ -1,3 +1,4 @@
+import React from "react"
 
 import InputFields from "./InputFields"
 import FavoriteButtons from "./FavoriteButtons"

@@ -1,4 +1,5 @@
 
+import React from 'react'
 import { ContactInfoType } from '../types'
 
 const ContactInfo = ({ contact }: ContactInfoType): JSX.Element => {

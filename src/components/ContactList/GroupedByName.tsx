@@ -1,6 +1,6 @@
+import React, {useMemo} from "react"
 import ContactCard from "../ContactCard/ContactCard"
 import { Contact, GroupedByFirstLetter, GroupedContactsByNameTypeProps } from "../../components/types"
-import React, {useMemo} from "react"
 
 const GroupedContactsByName = ({ contactsData, handleSaveChanges }: GroupedContactsByNameTypeProps): JSX.Element => {
     const groupLetters = (): GroupedByFirstLetter=> {

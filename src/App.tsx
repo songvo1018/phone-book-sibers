@@ -1,13 +1,27 @@
-import React from "react"
+import React, { useState } from "react"
 import "./App.css"
 import ContactList from "./components/ContactList/ContactList"
+import Authorization from "./components/Authorization/Authorization"
+import SimpleButton from "./components/ContactCard/SimpleButton"
 
-function App(): JSX.Element {
+const App = (): JSX.Element => {
+    const [isAuth, setIsAuth] = useState(false)
+
+    const handleAuthChange = (value: boolean): void => {
+        setIsAuth(value)
+    }
+
     return (
         <div className="App">
             <header className="App-header">Phone book</header>
-            {/*  */}
-            <ContactList />
+            {isAuth &&
+                <SimpleButton className="logout" handler={() => setIsAuth(!isAuth)}>Log out</SimpleButton>
+            }
+            {
+                isAuth ?
+                    <ContactList /> :
+                    <Authorization handleAuthChange={handleAuthChange} />
+            }
         </div>
     )
 }

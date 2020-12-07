@@ -1,3 +1,4 @@
+import React from 'react'
 import { SimpleButtonProps } from '../types'
 
 const SimpleButton = ({ className, handler, children }: SimpleButtonProps): JSX.Element => {
