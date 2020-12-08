@@ -3,7 +3,7 @@
 
 import React, { FormEvent, useState } from "react";
 import "./Auth.css";
-import { IAuthState, validateControlType } from "./authTypes";
+import { IAuthState, validateType } from "./authTypes";
 import Button from "./Button/Button";
 import Input from "./Input/Input";
 import is from 'is_js'
@@ -65,16 +65,7 @@ const Authorization = ({ handleAuthChange }: AuthorizationProps): JSX.Element =>
 		event.preventDefault();
 	};
 
-
-	// ________________________________
-
-	const validateControl = (value: string, validation: {
-		required: boolean
-		email?: boolean
-		minLength?: number
-	}) => {
-		// const validateControl = ({ value, validation }: validateControlType) => {
-
+		const validateControl = ( value: string, validation : validateType) => {
 		if (!validation) {
 			return true;
 		}

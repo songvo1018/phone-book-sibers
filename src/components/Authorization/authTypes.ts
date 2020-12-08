@@ -25,11 +25,10 @@ export interface IAuthState {
   }
 }
 
-export interface validateControlType {
-  value: string
-  validation: {
+export interface validateType {
+  
     required: boolean
     email?: boolean
     minLength?: number
-  }
+
 }
